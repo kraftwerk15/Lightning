@@ -140,7 +140,9 @@ namespace Thunder
                             filename = a.Remove(position);
                             string pattern = @"(\.[0-9]{4}$)";
                             bool m = Regex.IsMatch(filename, pattern);
-                            if(!m && !string.IsNullOrEmpty(a))
+                            string recovery = @"(\(Recovery\))";
+                            bool n = Regex.IsMatch(filename, recovery);
+                            if(!m && !n && !string.IsNullOrEmpty(a))
                             {
                                 small.Add(a);
                                 System.Diagnostics.Debug.WriteLine("Basic File Info 146 : " + a.ToString());
@@ -220,17 +222,25 @@ namespace Thunder
             {
                 return "2018";
             }
-            //convert a year to string
-            //soft = result.ToString();
-            //check if anything has changed
-            //if (!string.IsNullOrEmpty(soft))
-                //return soft;
-            //else
-                //if it cannot be found, return the latest year version of Revit
-                //return "2018";
-
+            
+        }
+        public static double FileSize(string centralPath)
+        {
+            long bytes = 0;
+            double kilobytes = 0;
+            System.IO.FileInfo fileInfo = new FileInfo(centralPath);
+            if (fileInfo.Exists)
+            {
+                bytes = fileInfo.Length;
+                kilobytes = (double)bytes / 1024;
+                return kilobytes;
+            }
+            else
+                return 0;
         }
     }
+
+
 
     class BasicFileInfo
     {
@@ -280,10 +290,10 @@ namespace Thunder
         {
             if (StructuredStorageUtils.IsFileStucturedStorage(revitFileName))
             {
-                //will not run when someone has the file open.
-                using (StructuredStorageRoot ssRoot = new StructuredStorageRoot(revitFileName))
+                StructuredStorageRoot ssRoot = new StructuredStorageRoot(revitFileName);
+                if (ssRoot.BaseRoot != null)
                 {
-                    if (ssRoot.BaseRoot.StreamExists(StreamName) && ssRoot.BaseRoot != null)
+                    if (ssRoot.BaseRoot.StreamExists(StreamName))
                     {
                         StreamInfo imageStreamInfo =
                         ssRoot.BaseRoot.GetStreamInfo(StreamName);
@@ -299,12 +309,35 @@ namespace Thunder
                     else
                     {
                         return null;
-                    }
-                        //throw new NotSupportedException(string.Format("File doesn't contain {0} stream", StreamName));
-
-                   
+                    };
+                    //throw new NotSupportedException(string.Format("File doesn't contain {0} stream", StreamName));
                 }
+                else
+                {
+                    return null;
+                };
+                //will not run when someone has the file open.
+                //using (StructuredStorageRoot ssRoot = new StructuredStorageRoot(revitFileName))
+                //{
+                    //if (ssRoot.BaseRoot.StreamExists(StreamName) && ssRoot.BaseRoot != null)
+                    //{
+                    //    StreamInfo imageStreamInfo =
+                    //    ssRoot.BaseRoot.GetStreamInfo(StreamName);
 
+                    //    using (Stream stream = imageStreamInfo.GetStream(
+                    //      FileMode.Open, FileAccess.Read))
+                    //    {
+                    //        byte[] buffer = new byte[stream.Length];
+                    //        stream.Read(buffer, 0, buffer.Length);
+                    //        return buffer;
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    return null;
+                    //}
+                        //throw new NotSupportedException(string.Format("File doesn't contain {0} stream", StreamName));
+                        
             }
             else
             {

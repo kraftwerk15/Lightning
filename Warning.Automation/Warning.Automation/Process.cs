@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Thunder
 {
@@ -19,22 +20,35 @@ namespace Thunder
         /// <param name="processPath">The path to the process to execute.</param>
         /// <param name="args">The command line arguments to the process.</param>
         /// <returns>The exit code for the process.</returns>
-        public static int ByPathAndArguments(string processPath, string args)
+        public static int ByPathAndArguments(string processPath, string args, int year = 2018)
         {
             if (!File.Exists(processPath))
             {
                 throw new FileNotFoundException();
             }
+            Stopwatch counter = Stopwatch.StartNew();
+            counter.Start();
 
-            // get highest KEY from tables
-            //store that and start counter for Date Executed in RunStat table.
-            var process = new System.Diagnostics.Process { StartInfo = new System.Diagnostics.ProcessStartInfo(processPath, args) };
+            var process = new System.Diagnostics.Process { StartInfo = new ProcessStartInfo(processPath, args) };
             process.Start();
             
-            process.WaitForExit();
-
+            bool exit = process.WaitForExit(1200000);
+            if(exit)
+            {
+                counter.Stop();
+                return 0;
+            }
+            else
+            {
+                process.Kill();
+                counter.Stop();
+                return 0;
+            }
+            // get highest KEY from tables
+            //store that and start counter for Date Executed in RunStat table.
+            
             //examine timer and/or terminate process
-            return process.ExitCode;
+            //return process.ExitCode;
         }
 
         /// <summary>

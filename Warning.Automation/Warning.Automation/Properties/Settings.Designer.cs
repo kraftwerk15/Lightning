@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Thunder.Properties {
+namespace TidalWave.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

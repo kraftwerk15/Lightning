@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+	<assembly>
+		<name>Lightning</name>
+	</assembly>
+	<namespaces>
+		<namespace name="Thunder">
+			<category>Lightning.Automation</category>
+		</namespace>
+		<namespace name="TidalWave">
+			<category>Lightning.SQL</category>
+		</namespace>
+	</namespaces>
+</doc>

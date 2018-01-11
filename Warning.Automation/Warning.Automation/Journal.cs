@@ -148,13 +148,13 @@ namespace Thunder
             {
                 projectOpen += "Jrn.Command \"Ribbon\" , \"Open an existing project, ID_REVIT_FILE_OPEN\" \n" +
                                 "Jrn.Data \"FileOpenSubDialog\" , \"OpenAsLocalCheckBox\", \"True\" \n" +
-                                "Jrn.Data \"FileOpenSubDialog\" , \"DetachCheckBox\", \"True\" \n" +
-                                "Jrn.Data \"FileOpenSubDialog\" , \"OpenAsLocalCheckBox\" , \"False\" \n" +
+                                //"Jrn.Data \"FileOpenSubDialog\" , \"DetachCheckBox\", \"True\" \n" +
+                                //"Jrn.Data \"FileOpenSubDialog\" , \"OpenAsLocalCheckBox\" , \"False\" \n" +
                                 "Jrn.Data \"FileOpenSubDialog\" , \"AuditCheckBox\" , \"True\" \n" +
                                 "Jrn.Data \"TaskDialogResult\" , \"This operation can take a long time. Recommended use includes periodic maintenance of large files and preparation for upgrading to a new release. Do you want to continue?\", \"Yes\", \"IDYES\" \n" +
                                 "Jrn.Data \"File Name\" , \"IDOK\", \"" + revitFilePath + "\" \n" +
                                 "Jrn.Data \"WorksetConfig\" , \"All\", 0  \n" +
-                                "Jrn.Data \"TaskDialogResult\" , \"Detaching this model will create an independent model. You will be unable to synchronize your changes with the original central model.\" & vbLf & \"What do you want to do?\", \"Detach and preserve worksets\", \"1001\" \n" +
+                                //"Jrn.Data \"TaskDialogResult\" , \"Detaching this model will create an independent model. You will be unable to synchronize your changes with the original central model.\" & vbLf & \"What do you want to do?\", \"Detach and preserve worksets\", \"1001\" \n" +
                                 "Jrn.Data \"TaskDialogResult\" , \"Revit could not find or read 1 references.\" & vbLf & \"What do you want to do?\" , \"Ignore and continue opening the project\" , \"1002\" \n" 
                                 //"Jrn.Directive \"DocSymbol\" , \"[]\" +
                                 ;
@@ -382,10 +382,9 @@ namespace Thunder
             yearList.Add(args);
 
             return yearList;
-            
         }
 
-        private static void ContentProcess(int i, int ring, int prjKey, List<dynamic> YearList, List<dynamic> Holding, string CentralPath, SqlConnection newConn)
+        private static string ContentProcess(int i, int ring, int prjKey, List<dynamic> YearList, List<dynamic> Holding, string CentralPath, string newConn)
         {
             string processPath;
             string args;
@@ -396,28 +395,47 @@ namespace Thunder
             processPath = temp[0];
             args = temp[1];
             DateTime dateEx = DateTime.Now;
-            List<int> sqlEarly = SQL.InsertInto(newConn, Holding[i][1], dateEx);
-            string sub = CSVWriter(sqlEarly,CentralPath);
-            //int exitCode = Process.ByPathAndArguments(processPath, args);
-            int exitCode = 0;
-            while (exitCode == 0)
+            List<int> sqlEarly = TidalWave.SQL.InsertInto(newConn, Holding[i][1], dateEx);
+            //returns the runID and the projectTableID to send to the .csv
+            double fileSize = IdentifyYear.FileSize(CentralPath);
+            string csvEarly = CSVPath(CentralPath);
+            if (File.Exists(csvEarly))
+                File.Delete(csvEarly);
+            string sub = CSVWriter(sqlEarly,csvEarly,fileSize);
+            int exitCode = Process.ByPathAndArguments(processPath, args, year); 
+            int send = sqlEarly[0];
+            string select = "SELECT " + send + "FROM [drRunStat]";
+            List<dynamic> SelectComp = TidalWave.SQL.Select(newConn, select);
+            if (SelectComp[4] == null)
             {
-                int send = sqlEarly[0];
-                SQL.Update(dateEx, send, newConn);
+                TidalWave.SQL.Update(dateEx, send, newConn, 2);
+                return "Failure";
             }
-            File.Delete(sub);
+            else if(SelectComp[4] == true)
+            {
+                TidalWave.SQL.Update(dateEx, send, newConn, 1);
+                return "Succes";
+            }
+            else
+            {
+                TidalWave.SQL.Update(dateEx, send, newConn, 0);
+                return "Failure";
+            };
         }
-
-        internal static string CSVWriter(List<int> data, string CentralPath)
+        internal static string CSVPath(string CentralPath)
         {
             string path = Path.GetDirectoryName(CentralPath);
             string result = Path.GetFileNameWithoutExtension(CentralPath);
             string sub = path + @"\" + result + ".csv";
+            return sub;
+        }
+        internal static string CSVWriter(List<int> data, string sub, double fileSize)
+        {
             using (TextWriter sw = new StreamWriter(sub))
             {
                 int rsKey = data[0];
                 int psKey = data[1];
-                sw.WriteLine("{0},{1}", rsKey, psKey);
+                sw.WriteLine("{0},{1},{2}", rsKey, psKey,fileSize);
                 sw.Flush();
             };
             
@@ -485,7 +503,7 @@ namespace Thunder
             List<dynamic> Holding = new List<dynamic>();
             List<dynamic> Failed = new List<dynamic>();
             List<dynamic> YearList = new List<dynamic>();
-            List<dynamic> tempPrj = new List<dynamic>();
+            List<dynamic> Status = new List<dynamic>();
             //string processPath;
             string path = "";
             DeleteJournalFile(saveLocation);
@@ -494,26 +512,20 @@ namespace Thunder
             //string prjNum = null;
             
             //Open the SQL Connection.
-            SqlConnection newConn = SQL.ConnectionOpen(SQLConnectionString);
+            SqlConnection newConn = TidalWave.SQL.ConnectionOpen(SQLConnectionString);
             //Get the highest Key for the Run Statistics.
             if(newConn != null && newConn.State == ConnectionState.Open)
             {
-                List<dynamic> dbInfo = SQL.Select(newConn, SQLQuery);
+                List<dynamic> dbInfo = TidalWave.SQL.Select(SQLConnectionString, SQLQuery);
                 //List<dynamic> dbInfo = SQLInfoGet(newConn, dbQuery);
                 ring = dbInfo[0];
                 ring++;
-
-                try
-                {
-                    string sqlPrj = "SELECT MAX(psKey) from [drPrjStat]";
-                    List<dynamic> prjStat = SQL.Select(newConn, sqlPrj);
-                    prjKey = prjStat[0];
-                    prjKey++;
-                }
-                catch
-                {
-                    //
-                }
+                
+                string sqlPrj = "SELECT MAX(psKey) from [drPrjStat]";
+                List<dynamic> prjStat = TidalWave.SQL.Select(SQLConnectionString, sqlPrj);
+                prjKey = prjStat[0];
+                prjKey++;
+                
             }
             else
             {
@@ -538,7 +550,9 @@ namespace Thunder
                             //set workshare to bool, this was removed from the Dynamo Automation nodes, so forcing it to false.
                             bool workshare = false;
                             //give a clean list to insert content
-                            tempPrj.Clear();
+                            List<dynamic> tempPrj = new List<dynamic>();
+
+                            //tempPrj.Clear();
 
                             try
                             {
@@ -576,7 +590,7 @@ namespace Thunder
                                 //if the Central File Path already exists, do nothing
                                 else if (Central.Contains(path))
                                 {
-                                    Failed.Add("Duplicate Found. Omitting from Secquence. " + path);
+                                    Failed.Add("Duplicate Found. Omitting from Sequence. " + path);
                                 }
                                 //all is true, lets move forward
                                 else
@@ -612,7 +626,9 @@ namespace Thunder
                                     // Create journal file
                                     string journaling = WriteJournalFile(saveLocation, journalString, item[1], modelYear);
                                     tempPrj.Add(journaling);
+                                    Debug.WriteLine(journaling);
                                     tempPrj.Add(item[1]);
+                                    Debug.WriteLine(item[1]);
                                     //Add the journal file to a list for us to work over later out of this loop
                                     Holding.Add(tempPrj);
                                 }
@@ -621,8 +637,16 @@ namespace Thunder
                             //something failed miserably. Do not stop, log it and move on to the next item.
                             catch
                             {
-                                string exmsg = String.Format("The file path [{0}] received an error where it could not find the last modified date and time of the file: Signficant Error: ", path);
-                                Failed.Add(exmsg);
+                                if(c[1] == null)
+                                {
+                                    string exmsg = String.Format("The file path is null. Cannot operate over null Central Path: Journal 628");
+                                    Failed.Add(exmsg);
+                                }
+                                else
+                                {
+                                    string exmsg = String.Format("The file path [{0}] received an error where it could not find the last modified date and time of the file: Signficant Error: ", c[1]);
+                                    Failed.Add(exmsg);
+                                }
                             }
                         }
                     }
@@ -630,10 +654,17 @@ namespace Thunder
                 //larger methods failed. Log and move on.
                 else
                 {
-                    string exmsg = String.Format("Error in finding folder for File [{0}]", item);
-                    Failed.Add(exmsg);
-                }
-
+                    if(fileName.Count == 0 || fileName[0] == null)
+                    {
+                        string exmsg = String.Format("Error in finding folder for File. File was null.");
+                        Failed.Add(exmsg);
+                    }
+                    else
+                    {
+                        string exmsg = String.Format("Error in finding folder for File [{0}]", fileName[0]);
+                        Failed.Add(exmsg);
+                    };
+                };
             }
             counter.Stop();
             TimeSpan ct = counter.Elapsed;
@@ -643,10 +674,14 @@ namespace Thunder
             counter.Start();
             //List of Central Files
             container.Add(Central);
+            foreach(string i in Central)
+                Debug.WriteLine(i);
             //List of Journal Files
             container.Add(Holding);
+            
             //List of Files that are not going to run. Keep this to compare against later.
             container.Add(Failed);
+            Debug.WriteLine(Failed);
             //Set the number of Processes you want to run parallel
             ParallelOptions options = new ParallelOptions() { MaxDegreeOfParallelism = multithreading };
             try
@@ -656,11 +691,15 @@ namespace Thunder
                 {
                     try
                     {
+                        string status;
                         //generate content for the process
-                        Parallel.ForEach(Central, options, (x, y, i) => {
+                        Parallel.ForEach(Central, options, (x, y, i) => 
+                        {
                             int key = unchecked((int)i);
-                            ContentProcess(key, ring, prjKey, YearList, Holding, Central[key], newConn);
+                            status = ContentProcess(key, ring, prjKey, YearList, Holding, Central[key], SQLConnectionString);
+                            Status.Add(status);
                         });
+                        
                     }
                     catch (Exception)
                     {
@@ -673,7 +712,8 @@ namespace Thunder
                 {
                     for (int i = 0; i < Central.Count; i++)
                     {
-                        ContentProcess(i, ring, prjKey, YearList, Holding, Central[i], newConn);
+                        string status = ContentProcess(i, ring, prjKey, YearList, Holding, Central[i], SQLConnectionString);
+                        Status.Add(status);
                     };
                 }
                 else
@@ -685,7 +725,7 @@ namespace Thunder
             finally
             {
                 //Closing the SQL Connection.
-                SQL.ConnectionClose(newConn);
+                TidalWave.SQL.ConnectionClose(newConn);
 
             };
             counter.Stop();
@@ -693,6 +733,7 @@ namespace Thunder
             string elapsedTime2 = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
 
             Debug.WriteLine(elapsedTime2);
+            container.Add(Status);
             //Return to Dynamo the Container of Everything that Happened.
             return container;
         }

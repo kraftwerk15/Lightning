@@ -4,10 +4,10 @@ using System.Linq;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace Thunder
+namespace TidalWave
 {
     /// <summary>
-    /// 
+    /// Error from Dynamo. Do Not Use.
     /// </summary>
     public class SQL
     {
@@ -32,6 +32,7 @@ namespace Thunder
             }
             return newConn;
         }
+        
         /// <summary>
         /// Create a string to use as an INSERT INTO command for SQL Databases.
         /// </summary>
@@ -40,7 +41,6 @@ namespace Thunder
         /// <param name="Values">The values to be inserted as a list of list.</param>
         /// <returns>A string containing the INSERT INTO commmand.</returns>
         /// <search>sql, database, insert, inject, add</search>
-
         public static List<string> InsertInto(string Table, string[] Columns, dynamic[][] Values)
         {
             List<string> holding = new List<string>();
@@ -60,13 +60,12 @@ namespace Thunder
             foreach(var i in Values)
             {
                 string value = "";
-                dynamic hold = i.Last();
-                foreach (var c in i)
+                for (int j = 0; j < i.Length; j++)
                 {
-                    if (c.Equals(hold))
-                        value = value + "\'" + c + "\');";
+                    if (j == i.Length - 1)
+                        value = value + "\'" + i[j] + "\');";
                     else
-                        value = value + "\'" + c + "\',";
+                        value = value + "\'" + i[j] + "\',";
                 }
                 holding.Add(table + value);
             }
@@ -78,11 +77,12 @@ namespace Thunder
         /// <param name="Connection"></param>
         /// <param name="statement"></param>
         /// <returns>Returns information as strings.</returns>
-        public static List<dynamic> Select(SqlConnection Connection, string statement)
+        public static List<dynamic> Select(string Connection, string statement)
         {
             List<dynamic> tempConn = new List<dynamic>();
-            SqlCommand getRunStat = new SqlCommand(statement, Connection);
             SqlDataReader theReader = null;
+            SqlConnection db = ConnectionOpen(Connection);
+            SqlCommand getRunStat = new SqlCommand(statement, db);
             try
             {
                 theReader = getRunStat.ExecuteReader();
@@ -91,6 +91,7 @@ namespace Thunder
                     object temp = theReader[0];
                     tempConn.Add(temp);
                 }
+                ConnectionClose(db);
             }
             catch
             {
@@ -98,67 +99,120 @@ namespace Thunder
             }
             return tempConn;
         }
-
-        internal static List<int> InsertInto(SqlConnection newConn, string prjNum, DateTime dateTime)
+        internal static List<int> InsertInto(string newConn, string prjNum, DateTime dateTime)
         {
-            List<int> type = new List<int>();
-            string sql = "INSERT INTO drRunStat(rsDateStart) VALUES (@param2)";
-            SqlCommand set = new SqlCommand(sql, newConn);
-            set.Parameters.Add("@param2", SqlDbType.DateTime).Value = dateTime;
-            set.CommandType = CommandType.Text;
-            int id = set.ExecuteNonQuery();
-            type.Add(id);
-            string sqlPrj = "INSERT INTO drPrjStat(psPrjNumber,psRunKey) VALUES (@param2,@param3)";
-            SqlCommand setPrj = new SqlCommand(sqlPrj, newConn);
-            setPrj.Parameters.Add("@param2", SqlDbType.VarChar).Value = prjNum;
-            setPrj.Parameters.Add("@param3", SqlDbType.Int).Value = id;
-            setPrj.CommandType = CommandType.Text;
-            int backID = setPrj.ExecuteNonQuery();
-            type.Add(backID);
-            return type;
-        }
-
-        internal static void Update(DateTime dateEx, int key, SqlConnection newConn)
-        {
-            try
+            SqlConnection tempConn = ConnectionOpen(newConn);
+            using (tempConn)
             {
-                SqlCommand update = new SqlCommand();
-                update.CommandText = "UPDATE drRunStat SET rsDateEnd = @dateCom, rsRunFailure = @fail WHERE rsDateStart = @dateEx and rsKey = @Key";
-                DateTime dateCom = DateTime.Now;
-
-                using (update)
+                List<int> type = new List<int>();
+                string sql = "INSERT INTO drRunStat(rsDateStart) VALUES (@param2)";
+                SqlCommand set = new SqlCommand(sql, tempConn);
+                set.Parameters.Add("@param2", SqlDbType.DateTime).Value = dateTime;
+                set.CommandType = CommandType.Text;
+                int id = set.ExecuteNonQuery();
+                type.Add(id);
+                string sqlPrj = "INSERT INTO drPrjStat(psPrjNumber,psRunKey) VALUES (@param2,@param3)";
+                SqlCommand setPrj = new SqlCommand(sqlPrj, tempConn);
+                setPrj.Parameters.Add("@param2", SqlDbType.VarChar).Value = prjNum;
+                //setPrj.Parameters.Add("@param3", SqlDbType.Int).Value = id;
+                setPrj.CommandType = CommandType.Text;
+                int backID = setPrj.ExecuteNonQuery();
+                type.Add(backID);
+                string sqlUpdate = "UPDATE drPrjStat SET psRunKey = " + id +" WHERE psKey = " + backID;
+                SqlCommand setUpdate = new SqlCommand(sqlUpdate, tempConn);
+                setUpdate.ExecuteNonQuery();
+                return type;
+            };
+        }
+        /// <summary>
+        /// Generates an Update to your SQL Table using 
+        /// </summary>
+        /// <param name="dateEx">internal</param>
+        /// <param name="key">internal</param>
+        /// <param name="Connection">internal</param>
+        /// <param name="fail">internal</param>
+        internal static string Update(DateTime dateEx, int key, string Connection, int fail = 2)
+        {
+            SqlConnection tempConn = ConnectionOpen(Connection);
+            using (tempConn)
+            {
+                try
                 {
+                    string commandtext = "";
+                    SqlCommand update = new SqlCommand();
+                    DateTime dateCom = DateTime.Now;
 
-                    update.Parameters.Add("@dateCom", SqlDbType.DateTime).Value = dateCom;
-                    update.Parameters.Add("@fail", SqlDbType.Bit).Value = true;
-                    update.Parameters.Add("@dateEx", SqlDbType.DateTime).Value = dateEx;
-                    update.Parameters.Add("@Key", SqlDbType.Int).Value = key;
-                    update.ExecuteNonQuery();
-                    //consider tracking rows affected
+                    using (update)
+                    {
+                        update.Connection = tempConn;
+                        if (fail < 2)
+                        {
+                            commandtext = "UPDATE drRunStat SET rsDateEnd = @dateCom WHERE rsKey = @Key";
+                        }
+                        else
+                        {
+                            commandtext = "UPDATE drRunStat SET rsDateEnd = @dateCom, rsRunFailure = @fail WHERE rsKey = @Key";
+                            update.Parameters.Add("@fail", SqlDbType.Bit).Value = fail;
+                        }
+                        update.CommandText = commandtext;
+                        update.Parameters.Add("@dateCom", SqlDbType.DateTime).Value = dateCom;
+                        //update.Parameters.Add("@dateEx", SqlDbType.DateTime).Value = dateEx;
+                        update.Parameters.Add("@Key", SqlDbType.Int).Value = key;
+                        update.ExecuteNonQuery();
+                        //consider tracking rows affected
+                    }
+                    return "Executed Successfully.";
                 }
-            }
-            catch (SqlException e)
-            {
-                System.Diagnostics.Debug.WriteLine("SQL Line 154 : " + e.ToString());
-                //throw new ArgumentException("Database Could Not Accept the Insert as Requested. " + e);
-            }
-        }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine("SQL Line 154 : " + e.ToString());
+                    return "Execution Failed. " + e.ToString();
+                    //throw new ArgumentException("Database Could Not Accept the Insert as Requested. " + e);
+                };
 
+            };
+        }
+        public static List<string> Update(string Table, List<string> Columns, List<List<dynamic>> Values, string Where)
+        {
+            List<string> holding = new List<string>();
+            try
+                {
+                    string start = "UPDATE ";
+                    string table = start + Table + "SET ";
+                    for (int i = 0; i < Values.Count; i++)
+                    {
+                        string column = "";
+                        for (int j = 0; j < Values[i].Count; j++)
+                        {
+                            if (j == Columns.Count - 1)
+                                column = column + Columns[j] + " = " + Values[i][j].ToString() + " WHERE ";
+                            else
+                                column = column + Columns[j] + " = " + Values[i][j].ToString() + ", ";
+                        }
+                        string where = table + column + Where;
+                        holding.Add(where);
+                    };
+                }
+                catch
+                {
+                    throw new Exception();
+                };
+            return holding;
+        }
         /// <summary>
         /// Closes a SQL Connection.
         /// </summary>
-        /// <param name="newConn">The Connection as a SQLConnection object.</param>
-        public static void ConnectionClose(SqlConnection newConn)
+        /// <param name="Connection">The Connection as a SQLConnection object.</param>
+        public static void ConnectionClose(SqlConnection Connection)
         {
             try
             {
-                newConn.Close();
+                Connection.Close();
             }
             catch (Exception)
             {
                 throw new ArgumentException("Closing the Database Connection Failed");
             }
         }
-
     }
 }
