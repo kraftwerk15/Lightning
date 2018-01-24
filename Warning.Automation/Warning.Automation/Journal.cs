@@ -682,13 +682,13 @@ namespace Thunder
             //List of Files that are not going to run. Keep this to compare against later.
             container.Add(Failed);
             Debug.WriteLine(Failed);
-            //Set the number of Processes you want to run parallel
-            ParallelOptions options = new ParallelOptions() { MaxDegreeOfParallelism = multithreading };
             try
             {
                 //If the user selected multithreading and there are Central Files
-                if (multithreading > 0 && Central.Count > 0)
+                if (multithreading >= 1 && Central.Count > 0)
                 {
+                    //Set the number of Processes you want to run parallel
+                    ParallelOptions options = new ParallelOptions() { MaxDegreeOfParallelism = multithreading };
                     try
                     {
                         string status;

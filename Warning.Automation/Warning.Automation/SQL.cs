@@ -111,9 +111,9 @@ namespace TidalWave
                 set.CommandType = CommandType.Text;
                 int id = set.ExecuteNonQuery();
                 type.Add(id);
-                string sqlPrj = "INSERT INTO drPrjStat(psPrjNumber,psRunKey) VALUES (@param2,@param3)";
+                string sqlPrj = "INSERT INTO drPrjStat(psPrjNumber,psRunKey) VALUES (@param6)";
                 SqlCommand setPrj = new SqlCommand(sqlPrj, tempConn);
-                setPrj.Parameters.Add("@param2", SqlDbType.VarChar).Value = prjNum;
+                setPrj.Parameters.Add("@param6", SqlDbType.VarChar).Value = prjNum;
                 //setPrj.Parameters.Add("@param3", SqlDbType.Int).Value = id;
                 setPrj.CommandType = CommandType.Text;
                 int backID = setPrj.ExecuteNonQuery();
