@@ -9,7 +9,7 @@ namespace TidalWave
     /// <summary>
     /// Error from Dynamo. Do Not Use.
     /// </summary>
-    public class SQL
+    public static class SQL
     {
         /// <summary>
         /// Open a SQL Connection.
@@ -88,8 +88,18 @@ namespace TidalWave
                 theReader = getRunStat.ExecuteReader();
                 while (theReader.Read())
                 {
-                    object temp = theReader[0];
-                    tempConn.Add(temp);
+                    Object[] values = new Object[theReader.FieldCount];
+                    int fieldCount = theReader.GetValues(values);
+                    if (fieldCount == 1)
+                    {
+                        object temp = theReader[0];
+                        tempConn.Add(temp);
+                    }
+                    else
+                    {
+                        foreach (var i in values)
+                            tempConn.Add(i.ToString());
+                    }
                 }
                 ConnectionClose(db);
             }
@@ -105,22 +115,26 @@ namespace TidalWave
             using (tempConn)
             {
                 List<int> type = new List<int>();
-                string sql = "INSERT INTO drRunStat(rsDateStart) VALUES (@param2)";
+                string sql = "INSERT INTO drRunStat(rsDateStart) OUTPUT INSERTED.rsKey VALUES (@param2)";
                 SqlCommand set = new SqlCommand(sql, tempConn);
                 set.Parameters.Add("@param2", SqlDbType.DateTime).Value = dateTime;
                 set.CommandType = CommandType.Text;
-                int id = set.ExecuteNonQuery();
-                type.Add(id);
-                string sqlPrj = "INSERT INTO drPrjStat(psPrjNumber,psRunKey) VALUES (@param6)";
+                int key = Convert.ToInt32(set.ExecuteScalar());
+                //Removed ExecuteNonQuery() as I need the key, not rows affected.
+                //int id = set.ExecuteNonQuery();
+                type.Add(key);
+                string sqlPrj = "INSERT INTO drPrjStat(psPrjNumber,psRunKey) OUTPUT INSERTED.psKey VALUES (@param6,@param3)";
                 SqlCommand setPrj = new SqlCommand(sqlPrj, tempConn);
                 setPrj.Parameters.Add("@param6", SqlDbType.VarChar).Value = prjNum;
-                //setPrj.Parameters.Add("@param3", SqlDbType.Int).Value = id;
+                setPrj.Parameters.Add("@param3", SqlDbType.Int).Value = key;
                 setPrj.CommandType = CommandType.Text;
-                int backID = setPrj.ExecuteNonQuery();
-                type.Add(backID);
-                string sqlUpdate = "UPDATE drPrjStat SET psRunKey = " + id +" WHERE psKey = " + backID;
-                SqlCommand setUpdate = new SqlCommand(sqlUpdate, tempConn);
-                setUpdate.ExecuteNonQuery();
+                int key1 = Convert.ToInt32(setPrj.ExecuteScalar());
+                //Removed ExecuteNonQuery() as I need the key, not rows affected.
+                //int backID = setPrj.ExecuteNonQuery();
+                type.Add(key1);
+                //string sqlUpdate = "UPDATE drPrjStat SET psRunKey = " + id +" WHERE psKey = " + backID;
+                //SqlCommand setUpdate = new SqlCommand(sqlUpdate, tempConn);
+                //setUpdate.ExecuteNonQuery();
                 return type;
             };
         }
@@ -172,6 +186,14 @@ namespace TidalWave
 
             };
         }
+        /// <summary>
+        /// Creates an Update string for updating existing rows in a Database.
+        /// </summary>
+        /// <param name="Table">Table Name.</param>
+        /// <param name="Columns">Column Names.</param>
+        /// <param name="Values">Values to Update.</param>
+        /// <param name="Where">Filter using a WHERE. The WHERE is required with this node.</param>
+        /// <returns></returns>
         public static List<string> Update(string Table, List<string> Columns, List<List<dynamic>> Values, string Where)
         {
             List<string> holding = new List<string>();

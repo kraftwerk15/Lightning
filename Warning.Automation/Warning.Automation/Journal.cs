@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Autodesk.DesignScript.Runtime;
 
 namespace Thunder
 {
@@ -129,6 +130,7 @@ namespace Thunder
         /// </summary>
         /// <param name="revitFilePath">The path to the Revit file. This can be an .rvt or .rfa file.</param>
         /// <param name="circumventPerspectiveViews">Should the document switch to the default 3D view?</param>
+        /// <param name="workshareScenario">Check if in a Worksharing scenario.</param>
         /// <returns>The part of the journal string responsible for opening a project.</returns>
         private static string BuildProjectOpen(string revitFilePath, bool circumventPerspectiveViews = false, bool workshareScenario = false)
         {
@@ -265,15 +267,18 @@ namespace Thunder
         /// </summary>
         /// <param name="journalFilePath">The path of the generated journal file.</param>
         /// <param name="journalString">The string for the journal file.</param>
+        /// <param name="modelYear">The Year of Revit the Jounral File will open.</param>
+        /// <param name="prjNum">The Project Number will be written to the Journal File Name.</param>
         private static string WriteJournalFile(string journalFilePath, string journalString, string prjNum = null, int modelYear = 2018)
         {
             string FilePath;
             var time = DateTime.UtcNow.Date.ToString("yyyy.MM.dd");
             char last = journalFilePath[journalFilePath.Length - 1];
-            if (!last.Equals(@"\\"))
-            {
-                journalFilePath = journalFilePath + @"\";
-            }
+            string pathWithTrailingSlash = journalFilePath.EndsWith(@"\") ? journalFilePath : journalFilePath + @"\";
+            //if (!last.Equals(@"\\"))
+            //{
+            //    journalFilePath = journalFilePath + @"\";
+            //}
             Directory.CreateDirectory(journalFilePath + time + @"\" + modelYear);
             File.Copy(@"C:\ProgramData\Autodesk\Revit\Addins\" + modelYear + @"\Dynamo.addin", journalFilePath + time + @"\" + modelYear + @"\Dynamo.addin", true);
             if (string.IsNullOrEmpty(journalFilePath))
@@ -376,8 +381,8 @@ namespace Thunder
             revitEx += @"\Revit.exe";
 
             string processPath = revitEx;
-            string args = " /language ENU " + process + " /nosplash";
-
+            //string args = " /language ENU " + process + " /nosplash";
+            string args = process;
             yearList.Add(processPath);
             yearList.Add(args);
 
@@ -402,16 +407,16 @@ namespace Thunder
             if (File.Exists(csvEarly))
                 File.Delete(csvEarly);
             string sub = CSVWriter(sqlEarly,csvEarly,fileSize);
-            int exitCode = Process.ByPathAndArguments(processPath, args, year); 
+            //int exitCode = Process.ByPathAndArguments(processPath, args); 
             int send = sqlEarly[0];
-            string select = "SELECT " + send + "FROM [drRunStat]";
+            string select = "SELECT * FROM [drRunStat] WHERE rsKey = " + send;
             List<dynamic> SelectComp = TidalWave.SQL.Select(newConn, select);
-            if (SelectComp[4] == null)
+            if (SelectComp[4] == null || SelectComp[4] == "")
             {
                 TidalWave.SQL.Update(dateEx, send, newConn, 2);
                 return "Failure";
             }
-            else if(SelectComp[4] == true)
+            else if(SelectComp[4] = true)
             {
                 TidalWave.SQL.Update(dateEx, send, newConn, 1);
                 return "Succes";
@@ -455,6 +460,7 @@ namespace Thunder
         /// <param name="revitVersion">The version number of Revit (e.g. 2017).</param>
         /// <param name="debugMode">Should the journal file be run in debug mode? Set this to true if you expect models to have warnings (e.g. missing links etc.).</param>
         /// <param name="circumventPerspectiveViews">Should the document switch to the default 3D view? Set this to true if you expect models will open with a perspective view as last saved view / starting view.</param>
+        /// <param name="workshareScenario">Check if in a Revit Worksharing scenario.</param>
         /// <returns>The path of the generated journal file.</returns>
         public static string BySinglePath(string revitFilePath, string workspacePath, dynamic revitVersion, string journalFilePath = "", bool debugMode = false, bool circumventPerspectiveViews = false, bool workshareScenario = false)
         {
@@ -492,10 +498,11 @@ namespace Thunder
         /// <param name="multithreading">Enable MultiThreading to allow multiple processes to run concurrently.</param>
         /// <param name="SQLConnectionString">Optional. Add a Connection to your Database to write directly. Else Node will return a list regardless.</param>
         /// <param name="SQLQuery">Optional. Select the highest key on the main table to insert tracking data.</param>
-        /// <returns>A completed process. Returns a list of Journal files for deletion if desired.</returns>
+        /// <returns>A completed process. Returns a Lists of Central File Path, Journal File Path, Time to Find Files, Time to Execute on Files, Failed Descriptions, and the Status of File.</returns>
         /// <search>journal, file, automation, assessment, test, automatic</search>
-
-        public static List<List<dynamic>> ByFolderPath(string workspacePath, List<List<string>> FolderLocations, string SQLConnectionString = "", string SQLQuery = "", string saveLocation = "", bool debugMode = true, bool circumventPerspectiveViews = false, int multithreading = 0)
+        
+        [MultiReturn(new[] { "Central File Path", "Journal File Path", "Find Time", "Run Time", "Failed Message", "Failed Status" })]
+        public static Dictionary<string, List<dynamic>> ByFolderPath(string workspacePath, List<List<string>> FolderLocations, string SQLConnectionString = "", string SQLQuery = "", string saveLocation = "", bool debugMode = true, bool circumventPerspectiveViews = false, int multithreading = 0)
         {
             Stopwatch counter = Stopwatch.StartNew();
             List<List<dynamic>> container = new List<List<dynamic>>();
@@ -504,6 +511,7 @@ namespace Thunder
             List<dynamic> Failed = new List<dynamic>();
             List<dynamic> YearList = new List<dynamic>();
             List<dynamic> Status = new List<dynamic>();
+            List<dynamic> Proj = new List<dynamic>();
             //string processPath;
             string path = "";
             DeleteJournalFile(saveLocation);
@@ -517,15 +525,29 @@ namespace Thunder
             if(newConn != null && newConn.State == ConnectionState.Open)
             {
                 List<dynamic> dbInfo = TidalWave.SQL.Select(SQLConnectionString, SQLQuery);
-                //List<dynamic> dbInfo = SQLInfoGet(newConn, dbQuery);
-                ring = dbInfo[0];
-                ring++;
-                
+                if(dbInfo[0] is int)
+                {
+                    ring = dbInfo[0];
+                    ring++;
+                }
+                else
+                {
+                    ring = 0;
+                    ring++;
+                }
+
                 string sqlPrj = "SELECT MAX(psKey) from [drPrjStat]";
                 List<dynamic> prjStat = TidalWave.SQL.Select(SQLConnectionString, sqlPrj);
-                prjKey = prjStat[0];
-                prjKey++;
-                
+                if(prjStat[0] is int)
+                {
+                    prjKey = prjStat[0];
+                    prjKey++;
+                }
+                else
+                {
+                    prjKey = 0;
+                    prjKey++;
+                }
             }
             else
             {
@@ -676,8 +698,10 @@ namespace Thunder
             container.Add(Central);
             foreach(string i in Central)
                 Debug.WriteLine(i);
+            foreach (var k in Holding)
+                Proj.Add(k[0]);
             //List of Journal Files
-            container.Add(Holding);
+            container.Add(Proj);
             
             //List of Files that are not going to run. Keep this to compare against later.
             container.Add(Failed);
@@ -704,6 +728,7 @@ namespace Thunder
                     catch (Exception)
                     {
                         //Failed.Add(Holding[i] + "threw an " + e);
+
                         throw new Exception();
                     }
                 }
@@ -731,11 +756,22 @@ namespace Thunder
             counter.Stop();
             TimeSpan ts = counter.Elapsed;
             string elapsedTime2 = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-
+            List<dynamic> Find = new List<dynamic>();
+            List<dynamic> Run = new List<dynamic>();
+            Find.Add(elapsedTime);
+            Run.Add(elapsedTime2);
             Debug.WriteLine(elapsedTime2);
             container.Add(Status);
             //Return to Dynamo the Container of Everything that Happened.
-            return container;
+            return new Dictionary<string, List<dynamic>>
+            {
+                { "Central File Path", Central},
+                { "Journal File Path", Proj},
+                { "Find Time", Find},
+                { "Run Time",Run},
+                { "Failed Message", Failed},
+                { "Failed Status", Status}
+            };
         }
 
     }

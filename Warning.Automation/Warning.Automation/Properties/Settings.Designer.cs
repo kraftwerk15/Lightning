@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TidalWave.Properties {
+namespace Default.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

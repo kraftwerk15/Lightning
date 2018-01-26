@@ -224,6 +224,11 @@ namespace Thunder
             }
             
         }
+        /// <summary>
+        /// Providing a Central File Path, retrieve the File Size of the File.
+        /// </summary>
+        /// <param name="centralPath">Central File Path.</param>
+        /// <returns>File Size in Kilobytes.</returns>
         public static double FileSize(string centralPath)
         {
             long bytes = 0;

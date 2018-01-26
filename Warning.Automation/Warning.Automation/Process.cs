@@ -20,7 +20,7 @@ namespace Thunder
         /// <param name="processPath">The path to the process to execute.</param>
         /// <param name="args">The command line arguments to the process.</param>
         /// <returns>The exit code for the process.</returns>
-        public static int ByPathAndArguments(string processPath, string args, int year = 2018)
+        public static int ByPathAndArguments(string processPath, string args)
         {
             if (!File.Exists(processPath))
             {
@@ -28,11 +28,13 @@ namespace Thunder
             }
             Stopwatch counter = Stopwatch.StartNew();
             counter.Start();
-
-            var process = new System.Diagnostics.Process { StartInfo = new ProcessStartInfo(processPath, args) };
-            process.Start();
+            //var process = new Process();
+            //var process = new System.Diagnostics.Process { StartInfo = new ProcessStartInfo(processPath, args) };
+            ProcessStartInfo startInfo = new ProcessStartInfo(processPath);
+            startInfo.Arguments = "\"" + args + "\"";
+            var process = System.Diagnostics.Process.Start(startInfo);
             
-            bool exit = process.WaitForExit(1200000);
+            bool exit = process.WaitForExit(480000);
             if(exit)
             {
                 counter.Stop();

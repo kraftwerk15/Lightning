@@ -10,5 +10,8 @@
 		<namespace name="TidalWave">
 			<category>Lightning.SQL</category>
 		</namespace>
+		<namespace name="Spring">
+			<category>Lightning.Revit</category>
+		</namespace>
 	</namespaces>
 </doc>

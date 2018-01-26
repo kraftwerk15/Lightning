@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Lawrence Group")]
 [assembly: AssemblyProduct("Lightning")]
-[assembly: AssemblyCopyright("Copyright © Lawrence Group 2017")]
+[assembly: AssemblyCopyright("Copyright © Lawrence Group 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
