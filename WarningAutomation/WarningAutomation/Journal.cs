@@ -381,8 +381,8 @@ namespace Thunder
             revitEx += @"\Revit.exe";
 
             string processPath = revitEx;
-            //string args = " /language ENU " + process + " /nosplash";
-            string args = process;
+            string args = " /language ENU " + process + " /nosplash";
+            //string args = process;
             yearList.Add(processPath);
             yearList.Add(args);
 
