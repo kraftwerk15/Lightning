@@ -31,9 +31,8 @@ namespace Thunder
             //var process = new Process();
             //var process = new System.Diagnostics.Process { StartInfo = new ProcessStartInfo(processPath, args) };
             ProcessStartInfo startInfo = new ProcessStartInfo(processPath);
-            startInfo.Arguments = "\"" + args + "\"";
+            startInfo.Arguments = args;
             var process = System.Diagnostics.Process.Start(startInfo);
-            
             bool exit = process.WaitForExit(480000);
             if(exit)
             {

@@ -381,8 +381,8 @@ namespace Thunder
             revitEx += @"\Revit.exe";
 
             string processPath = revitEx;
-            string args = " /language ENU " + process + " /nosplash";
-            //string args = process;
+            string args = process;
+            //string args = process; " /language ENU " + + " /nosplash"
             yearList.Add(processPath);
             yearList.Add(args);
 
@@ -407,7 +407,7 @@ namespace Thunder
             if (File.Exists(csvEarly))
                 File.Delete(csvEarly);
             string sub = CSVWriter(sqlEarly,csvEarly,fileSize);
-            //int exitCode = Process.ByPathAndArguments(processPath, args); 
+            int exitCode = Process.ByPathAndArguments(processPath, args); 
             int send = sqlEarly[0];
             string select = "SELECT * FROM [drRunStat] WHERE rsKey = " + send;
             List<dynamic> SelectComp = TidalWave.SQL.Select(newConn, select);
@@ -581,7 +581,8 @@ namespace Thunder
                                 //get the 0 instance of what is in the list, should be the Revit Year
                                 string quasi = c[0];
                                 //Attempt to parse the string of Year to an Integer
-                                Int32.TryParse(quasi, out int RevitYear);
+                                int RevitYear;
+                                int.TryParse(quasi, out RevitYear);
                                 //get the 1 instance of what is in the list, should be the Central Model Path
                                 int finding = c[1].IndexOf(":");
                                 //document it

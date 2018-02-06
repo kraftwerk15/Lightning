@@ -205,9 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Resource Include="LightningImages.resx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <None Include="LightningImages.resx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -224,8 +222,8 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\LightningLarge.png" />
-    <Content Include="Resources\LightningSmall.png" />
+    <Resource Include="Resources\LightningLarge.png" />
+    <Resource Include="Resources\LightningSmall.png" />
     <Content Include="Lightning_DynamoCustomization.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -234,14 +232,15 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-      <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v4.6">
-        <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
-      </GetReferenceAssemblyPaths>
-      <GetAssemblyIdentity AssemblyFiles="$(ProjectDir)$(OutDir)$(TargetName).dll">
-        <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
-      </GetAssemblyIdentity>
-      <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)Resources\LightningImages.resx" OutputResources="$(ProjectDir)Resources\LightningImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
-      <AL TargetType="library" EmbedResources="$(ProjectDir)Resources\LightningImages.resources" OutputAssembly="$(ProjectDir)$(OutDir)Lightning.customization.dll" Version="%25(AssemblyInfo.Version)" />
+      <Target Name="AfterBuild">
+        <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v4.6">
+    <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+  </GetReferenceAssemblyPaths>
+  <!-- Get assembly -->
+  <GetAssemblyIdentity AssemblyFiles="$(OutDir)$(TargetName).dll">
+    <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
+  </GetAssemblyIdentity>
+</Target>
     </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" />
