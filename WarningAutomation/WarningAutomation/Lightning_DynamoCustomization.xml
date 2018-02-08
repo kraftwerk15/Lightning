@@ -13,5 +13,8 @@
 		<namespace name="Spring">
 			<category>Lightning.Revit</category>
 		</namespace>
+		<namespace name="Snow">
+			<category>Lightning.File</category>
+		</namespace>
 	</namespaces>
 </doc>

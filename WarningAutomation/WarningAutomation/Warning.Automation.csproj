@@ -82,9 +82,6 @@
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
-    </Reference>
     <Reference Include="NodeServices2, Version=1.3.0.961, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamoVisualProgramming.DynamoServices.1.3.0\lib\net45\NodeServices2.dll</HintPath>
       <Private>False</Private>
@@ -186,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicFileInfo.cs" />
+    <Compile Include="Directory.cs" />
     <Compile Include="ProjectInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -224,6 +222,7 @@
   <ItemGroup>
     <Resource Include="Resources\LightningLarge.png" />
     <Resource Include="Resources\LightningSmall.png" />
+    <Content Include="images\journal.byfolderpath.PNG" />
     <Content Include="Lightning_DynamoCustomization.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -232,15 +231,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-      <Target Name="AfterBuild">
-        <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v4.6">
-    <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
-  </GetReferenceAssemblyPaths>
-  <!-- Get assembly -->
-  <GetAssemblyIdentity AssemblyFiles="$(OutDir)$(TargetName).dll">
-    <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
-  </GetAssemblyIdentity>
-</Target>
     </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" />
