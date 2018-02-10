@@ -223,15 +223,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TidalWave.SQL.ConnectionClose.Small.png" />
-    <None Include="Resources\Tidalwave.SQL.ConnectionClose.Large.png" />
+    <None Include="Resources\TidalWave.SQL.ConnectionClose.Large.png" />
     <None Include="Resources\TidalWave.SQL.Update.Small.png" />
-    <None Include="Resources\Tidalwave.SQL.Update.Large.png" />
+    <None Include="Resources\TidalWave.SQL.Update.Large.png" />
     <None Include="Resources\TidalWave.SQL.Select.Small.png" />
-    <None Include="Resources\Tidalwave.SQL.Select.Large.png" />
+    <None Include="Resources\TidalWave.SQL.Select.Large.png" />
     <None Include="Resources\TidalWave.SQL.InsertInto.Small.png" />
-    <None Include="Resources\Tidalwave.SQL.InsertInto.Large.png" />
+    <None Include="Resources\TidalWave.SQL.InsertInto.Large.png" />
     <None Include="Resources\TidalWave.SQL.ConnectionOpen.Small.png" />
-    <None Include="Resources\Tidalwave.SQL.ConnectionOpen.Large.png" />
+    <None Include="Resources\TidalWave.SQL.ConnectionOpen.Large.png" />
     <None Include="Resources\Spring.ProjectInformation.SetProjectNumber.Small.png" />
     <None Include="Resources\Spring.ProjectInformation.SetProjectNumber.Large.png" />
     <None Include="Resources\Spring.ProjectInformation.SetProjectName.Small.png" />
