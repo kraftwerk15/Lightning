@@ -123,7 +123,9 @@
       <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
     </Reference>
@@ -203,7 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="LightningImages.resx" />
+    <EmbeddedResource Include="LightningImages.resx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -220,9 +222,55 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\LightningLarge.png" />
-    <Resource Include="Resources\LightningSmall.png" />
-    <Content Include="images\journal.byfolderpath.PNG" />
+    <None Include="Resources\TidalWave.SQL.ConnectionClose.Small.png" />
+    <None Include="Resources\Tidalwave.SQL.ConnectionClose.Large.png" />
+    <None Include="Resources\TidalWave.SQL.Update.Small.png" />
+    <None Include="Resources\Tidalwave.SQL.Update.Large.png" />
+    <None Include="Resources\TidalWave.SQL.Select.Small.png" />
+    <None Include="Resources\Tidalwave.SQL.Select.Large.png" />
+    <None Include="Resources\TidalWave.SQL.InsertInto.Small.png" />
+    <None Include="Resources\Tidalwave.SQL.InsertInto.Large.png" />
+    <None Include="Resources\TidalWave.SQL.ConnectionOpen.Small.png" />
+    <None Include="Resources\Tidalwave.SQL.ConnectionOpen.Large.png" />
+    <None Include="Resources\Spring.ProjectInformation.SetProjectNumber.Small.png" />
+    <None Include="Resources\Spring.ProjectInformation.SetProjectNumber.Large.png" />
+    <None Include="Resources\Spring.ProjectInformation.SetProjectName.Small.png" />
+    <None Include="Resources\Spring.ProjectInformation.SetProjectName.Large.png" />
+    <None Include="Resources\Spring.ProjectInformation.GetProjectName.Small.png" />
+    <None Include="Resources\Spring.ProjectInformation.GetProjectName.Large.png" />
+    <None Include="Resources\Spring.ProjectInformation.GetProjectNumber.Small.png" />
+    <None Include="Resources\Spring.ProjectInformation.GetProjectNumber.Large.png" />
+    <None Include="Resources\Thunder.Process.KillCurrentProcess.Small.png" />
+    <None Include="Resources\Thunder.Process.KillCurrentProcess.Large.png" />
+    <None Include="Resources\Thunder.Process.ByPathAndArguments.Small.png" />
+    <None Include="Resources\Thunder.Process.ByPathAndArguments.Large.png" />
+    <None Include="Resources\Thunder.Presets.Clear.Small.png" />
+    <None Include="Resources\Thunder.Presets.ByWorkspacePathSliderNamesAndNewPath.Large.png" />
+    <None Include="Resources\Thunder.Presets.ByWorkspacePathSliderNamesAndNewPath.Small.png" />
+    <None Include="Resources\Thunder.Presets.Clear.Large.png" />
+    <None Include="Resources\Thunder.Presets.ByWorkspacePathAndSliderNames.Small.png" />
+    <None Include="Resources\Thunder.Presets.ByWorkspacePathAndSliderNames.Large.png" />
+    <None Include="Resources\Thunder.IdentifyYear.GetRevitYearSingle.Small.png" />
+    <None Include="Resources\Thunder.IdentifyYear.GetRevitYearSingle.Large.png" />
+    <None Include="Resources\Thunder.IdentifyYear.FileSize.Small.png" />
+    <None Include="Resources\Thunder.IdentifyYear.FileSize.Large.png" />
+    <None Include="Resources\Thunder.IdentifyYear.GetRevitYearList.Small.png" />
+    <None Include="Resources\Thunder.IdentifyYear.GetRevitYearList.Large.png" />
+    <None Include="Resources\Snow.Directory.GetFoldersinFolder.Small.png" />
+    <None Include="Resources\Snow.Directory.GetFoldersinFolder.Large.png" />
+    <None Include="Resources\Snow.Directory.GetFilesInAllFolders.Small.png" />
+    <None Include="Resources\Snow.Directory.GetFilesInAllFolders.Large.png" />
+    <None Include="Resources\Snow.Directory.GetFilesInThisFolder.Large.png" />
+    <None Include="Resources\Snow.Directory.GetFilesInThisFolder.Small.png" />
+    <None Include="Resources\Thunder.Journal.PurgeModels.Large.png" />
+    <None Include="Resources\Thunder.Journal.PurgeModels.Small.png" />
+    <None Include="Resources\Thunder.Journal.PurgeModel.Small.png" />
+    <None Include="Resources\Thunder.Journal.PurgeModel.Large.png" />
+    <None Include="Resources\Thunder.Journal.BySinglePath.Large.png" />
+    <None Include="Resources\Thunder.Journal.BySinglePath.Small.png" />
+    <None Include="Resources\Thunder.Journal.ByFolderPath.Large.png" />
+    <None Include="Resources\Thunder.Journal.ByFolderPath.Small.png" />
+    <None Include="images\journal.byfolderpath.PNG" />
     <Content Include="Lightning_DynamoCustomization.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -239,5 +287,14 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets'))" />
+  </Target>
+  <Target Name="BeforeBuild">
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)LightningImages.resx" OutputResources="$(ProjectDir)LightningImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL TargetType="library" EmbedResources="$(ProjectDir)LightningImages.resources" OutputAssembly="$(OutDir)Lightning.customization.dll" />
+  </Target>
+  <Target Name="AfterBuild">
   </Target>
 </Project>
