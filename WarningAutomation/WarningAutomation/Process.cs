@@ -33,7 +33,7 @@ namespace Thunder
             ProcessStartInfo startInfo = new ProcessStartInfo(processPath);
             startInfo.Arguments = args;
             var process = System.Diagnostics.Process.Start(startInfo);
-            bool exit = process.WaitForExit(480000);
+            bool exit = process.WaitForExit(1800000);
             if(exit)
             {
                 counter.Stop();

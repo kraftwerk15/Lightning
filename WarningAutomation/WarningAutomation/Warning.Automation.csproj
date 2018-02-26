@@ -186,6 +186,7 @@
   <ItemGroup>
     <Compile Include="BasicFileInfo.cs" />
     <Compile Include="Directory.cs" />
+    <Compile Include="ProjectExecution.cs" />
     <Compile Include="ProjectInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -222,6 +223,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_General.Small.png" />
+    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_General.Large.png" />
+    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_Specific.Small.png" />
+    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_Specific.Large.png" />
     <None Include="Resources\TidalWave.SQL.ConnectionClose.Small.png" />
     <None Include="Resources\TidalWave.SQL.ConnectionClose.Large.png" />
     <None Include="Resources\TidalWave.SQL.Update.Small.png" />

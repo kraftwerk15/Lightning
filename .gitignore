@@ -260,3 +260,14 @@ paket-files/
 __pycache__/
 *.pyc
 /WarningAutomation/ImageTesting
+WarningAutomation/LawrenceGroup/App.cs
+WarningAutomation/LawrenceGroup/Command.cs
+WarningAutomation/LawrenceGroup/LawrenceGroup.addin
+WarningAutomation/LawrenceGroup/LawrenceGroup.csproj
+WarningAutomation/LawrenceGroup/Properties/AssemblyInfo.cs
+WarningAutomation/LawrenceGroup/Resource/lgRibbon32.png
+WarningAutomation/LawrenceGroup/Resource/lgRibbon48.png
+WarningAutomation/LawrenceGroup/Resource/lgRibbon64.png
+WarningAutomation/LawrenceGroup/Synchronization.cs
+WarningAutomation/WarningAutomation.sln
+WarningAutomation/WarningAutomation.sln

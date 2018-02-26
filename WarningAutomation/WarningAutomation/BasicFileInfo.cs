@@ -233,7 +233,7 @@ namespace Thunder
         {
             long bytes = 0;
             double kilobytes = 0;
-            System.IO.FileInfo fileInfo = new FileInfo(centralPath);
+            FileInfo fileInfo = new FileInfo(centralPath);
             if (fileInfo.Exists)
             {
                 bytes = fileInfo.Length;

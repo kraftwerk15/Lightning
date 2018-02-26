@@ -419,7 +419,7 @@ namespace Thunder
             else if(SelectComp[4] = true)
             {
                 TidalWave.SQL.Update(dateEx, send, newConn, 1);
-                return "Succes";
+                return "Success";
             }
             else
             {
