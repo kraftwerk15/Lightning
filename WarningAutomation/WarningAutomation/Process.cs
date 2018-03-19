@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Dynamo.Graph.Nodes;
 
 namespace Thunder
 {
@@ -20,6 +21,7 @@ namespace Thunder
         /// <param name="processPath">The path to the process to execute.</param>
         /// <param name="args">The command line arguments to the process.</param>
         /// <returns>The exit code for the process.</returns>
+        [NodeCategory("Create")]
         public static int ByPathAndArguments(string processPath, string args)
         {
             if (!File.Exists(processPath))
@@ -58,6 +60,7 @@ namespace Thunder
         /// </summary>
         /// <param name="toggle">Should the current process be terminted?</param>
         /// <returns>The exit code for the process.</returns>
+        [NodeCategory("Action")]
         public static int KillCurrentProcess(bool toggle = false)
         {
             if (toggle)

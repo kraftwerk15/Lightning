@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data.SqlClient;
 using System.Data;
+using Dynamo.Graph.Nodes;
 
 namespace TidalWave
 {
@@ -16,6 +17,7 @@ namespace TidalWave
         /// </summary>
         /// <param name="dbConnection"></param>
         /// <returns></returns>
+        [NodeCategory("Create")]
         public static SqlConnection ConnectionOpen(string dbConnection)
         {
             SqlConnection newConn = new SqlConnection(dbConnection);
@@ -32,7 +34,7 @@ namespace TidalWave
             }
             return newConn;
         }
-        
+
         /// <summary>
         /// Create a string to use as an INSERT INTO command for SQL Databases.
         /// </summary>
@@ -41,6 +43,7 @@ namespace TidalWave
         /// <param name="Values">The values to be inserted as a list of list.</param>
         /// <returns>A string containing the INSERT INTO commmand.</returns>
         /// <search>sql, database, insert, inject, add</search>
+        [NodeCategory("Action")]
         public static List<string> InsertInto(string Table, string[] Columns, dynamic[][] Values)
         {
             List<string> holding = new List<string>();
@@ -77,6 +80,7 @@ namespace TidalWave
         /// <param name="Connection"></param>
         /// <param name="statement"></param>
         /// <returns>Returns information as strings.</returns>
+        [NodeCategory("Action")]
         public static List<dynamic> Select(string Connection, string statement)
         {
             List<dynamic> tempConn = new List<dynamic>();
@@ -194,6 +198,7 @@ namespace TidalWave
         /// <param name="Values">Values to Update.</param>
         /// <param name="Where">Filter using a WHERE. The WHERE is required with this node.</param>
         /// <returns></returns>
+        [NodeCategory("Action")]
         public static List<string> Update(string Table, List<string> Columns, List<List<dynamic>> Values, string Where)
         {
             List<string> holding = new List<string>();
@@ -225,6 +230,7 @@ namespace TidalWave
         /// Closes a SQL Connection.
         /// </summary>
         /// <param name="Connection">The Connection as a SQLConnection object.</param>
+        [NodeCategory("Create")]
         public static void ConnectionClose(SqlConnection Connection)
         {
             try

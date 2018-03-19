@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using Dynamo.Graph.Nodes;
 
 namespace Snow
 {
     public static class Directory
     {
+        [NodeCategory("Query")]
         public static List<string> GetFilesInThisFolder(string Directory, string Extension = "")
         {
             List<string> holding = new List<string>();
@@ -28,6 +29,7 @@ namespace Snow
             return holding;
         }
 
+        [NodeCategory("Query")]
         public static List<string> GetFilesInAllFolders(string Directory, string Extension = "")
         {
             List<string> holding = new List<string>();
@@ -48,6 +50,7 @@ namespace Snow
             return holding;
         }
 
+        [NodeCategory("Query")]
         public static List<string> GetFoldersinFolder(string Directory)
         {
             List<string> parent = System.IO.Directory.EnumerateDirectories(Directory).ToList();

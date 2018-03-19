@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Autodesk.DesignScript.Runtime;
+using Dynamo.Graph.Nodes;
 
 namespace Thunder
 {
@@ -314,6 +315,7 @@ namespace Thunder
         /// <param name="revitFilePath">The path to the Revit file. This can be an .rvt or .rfa file. The path may not contain whitespace or accented characters.</param>
         /// <param name="journalFilePath">The path of the generated journal file.</param>
         /// <returns>The path of the generated journal file.</returns>
+        [NodeCategory("Action")]
         public static string PurgeModel(string revitFilePath, string journalFilePath)
         {
             DeleteJournalFile(journalFilePath);
@@ -338,6 +340,7 @@ namespace Thunder
         /// <param name="revitFilePaths">The paths to the Revit files. These can be .rvt or .rfa files. The paths may not contain whitespace or accented characters.</param>
         /// <param name="journalFilePath">The path of the generated journal file.</param>
         /// <returns>The path of the generated journal file.</returns>
+        [NodeCategory("Action")]
         public static string PurgeModels(List<string> revitFilePaths, string journalFilePath)
         {
             DeleteJournalFile(journalFilePath);
@@ -462,6 +465,7 @@ namespace Thunder
         /// <param name="circumventPerspectiveViews">Should the document switch to the default 3D view? Set this to true if you expect models will open with a perspective view as last saved view / starting view.</param>
         /// <param name="workshareScenario">Check if in a Revit Worksharing scenario.</param>
         /// <returns>The path of the generated journal file.</returns>
+        [NodeCategory("Create")]
         public static string BySinglePath(string revitFilePath, string workspacePath, dynamic revitVersion, string journalFilePath = "", bool debugMode = false, bool circumventPerspectiveViews = false, bool workshareScenario = false)
         {
             DeleteJournalFile(journalFilePath);
@@ -500,7 +504,7 @@ namespace Thunder
         /// <param name="SQLQuery">Optional. Select the highest key on the main table to insert tracking data.</param>
         /// <returns>A completed process. Returns a Lists of Central File Path, Journal File Path, Time to Find Files, Time to Execute on Files, Failed Descriptions, and the Status of File.</returns>
         /// <search>journal, file, automation, assessment, test, automatic</search>
-        
+        [NodeCategory("Create")]
         [MultiReturn(new[] { "Central File Path", "Journal File Path", "Find Time", "Run Time", "Failed Message", "Failed Status" })]
         public static Dictionary<string, List<dynamic>> ByFolderPath(string workspacePath, List<List<string>> FolderLocations, string SQLConnectionString = "", string SQLQuery = "", string saveLocation = "", bool debugMode = true, bool circumventPerspectiveViews = false, int multithreading = 0)
         {

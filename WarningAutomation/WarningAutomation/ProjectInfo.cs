@@ -7,6 +7,7 @@ using Autodesk.Revit.DB;
 using Revit.Transaction;
 using RevitServices.Persistence;
 using RevitServices.Transactions;
+using Dynamo.Graph.Nodes;
 
 namespace Spring
 {
@@ -16,6 +17,7 @@ namespace Spring
         /// This will retrieve the built-in Project Number from the Project Information panel on the Manage Tab.
         /// </summary>
         /// <returns>Returns the current Project Number for the Project.</returns>
+        [NodeCategory("Query")]
         public static string GetProjectNumber()
         {
             Document doc = DocumentManager.Instance.CurrentDBDocument;
@@ -28,6 +30,7 @@ namespace Spring
         /// This will retrieve the built-in Project Name from the Project Information panel on the Manage Tab.
         /// </summary>
         /// <returns>Returns the current Project Name for the Project.</returns>
+        [NodeCategory("Query")]
         public static string GetProjectName()
         {
             Document doc = DocumentManager.Instance.CurrentDBDocument;
@@ -41,6 +44,7 @@ namespace Spring
         /// </summary>
         /// <param name="ProjectNumber">The Project Number you wish the Project to use.</param>
         /// <returns>Confirmation that the Project Number was changed.</returns>
+        [NodeCategory("Action")]
         public static string SetProjectNumber(string ProjectNumber)
         {
             Document doc = DocumentManager.Instance.CurrentDBDocument;
@@ -66,6 +70,7 @@ namespace Spring
         /// </summary>
         /// <param name="ProjectName">The Project Name you wish the Project to use.</param>
         /// <returns>Confirmation that the Project Name was changed.</returns>
+        [NodeCategory("Action")]
         public static string SetProjectName(string ProjectName)
         {
             Document doc = DocumentManager.Instance.CurrentDBDocument;
