@@ -249,9 +249,7 @@ namespace Thunder
         }
     }
 
-
-
-    class BasicFileInfo
+    internal class BasicFileInfo
     {
         private const string StreamName = "BasicFileInfo";
 
@@ -361,9 +359,7 @@ namespace Thunder
     internal static class StructuredStorageUtils
     {
         [DllImport("ole32.dll")]
-        static extern int StgIsStorageFile(
-          [MarshalAs( UnmanagedType.LPWStr )]
-      string pwcsName);
+        private static extern int StgIsStorageFile([MarshalAs( UnmanagedType.LPWStr )] string pwcsName);
 
         public static bool IsFileStucturedStorage(
           string fileName)
@@ -403,7 +399,7 @@ namespace Thunder
 
     internal class StructuredStorageRoot : IDisposable
     {
-        StorageInfo _storageRoot;
+        private StorageInfo _storageRoot;
 
         public StructuredStorageRoot(Stream stream)
         {

@@ -188,11 +188,6 @@
     <Compile Include="Directory.cs" />
     <Compile Include="ProjectExecution.cs" />
     <Compile Include="ProjectInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -214,15 +209,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Spring.Elements.ViewFamilyType.Small.png" />
+    <None Include="Resources\Spring.Elements.ViewFamilyType.Large.png" />
+    <None Include="Resources\Spring.Elements.FamilyInstanceByCurve.Small.png" />
+    <None Include="Resources\Spring.Elements.FamilyInstanceByCurve.Large.png" />
     <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_General.Small.png" />
     <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_General.Large.png" />
     <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_Specific.Small.png" />
