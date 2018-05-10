@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{863166A4-E192-4C39-9809-D08F4666C17D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LightningUI</RootNamespace>
+    <AssemblyName>LightningUI</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\LightningUI.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CoreNodeModels">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\nodes\CoreNodeModels.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DSRevitNodesUI">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Revit\2\Revit_2018\nodes\DSRevitNodesUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DynamoApplications">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoApplications.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DynamoCore">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DynamoServices">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoServices.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DynamoUtilities">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoUtilities.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ProtoCore">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\ProtoCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPI">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitNodes">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Revit\2\Revit_2018\RevitNodes.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitServices">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Revit\2\Revit_2018\RevitServices.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SlabEdgeTypes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIUtilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

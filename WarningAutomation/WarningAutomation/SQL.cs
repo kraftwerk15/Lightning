@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data.SqlClient;
 using System.Data;
 using Dynamo.Graph.Nodes;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace TidalWave
 {

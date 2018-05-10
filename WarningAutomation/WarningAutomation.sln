@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warning.Automation", "WarningAutomation\Warning.Automation.csproj", "{E6C5E623-7F12-4E22-83A0-6CBF494ED733}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LawrenceGroup", "LawrenceGroup\LawrenceGroup.csproj", "{2D03CA4F-6B17-485B-8D54-C5117052804A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightningUI", "LightningUI\LightningUI.csproj", "{863166A4-E192-4C39-9809-D08F4666C17D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{E6C5E623-7F12-4E22-83A0-6CBF494ED733}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6C5E623-7F12-4E22-83A0-6CBF494ED733}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6C5E623-7F12-4E22-83A0-6CBF494ED733}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D03CA4F-6B17-485B-8D54-C5117052804A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D03CA4F-6B17-485B-8D54-C5117052804A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D03CA4F-6B17-485B-8D54-C5117052804A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D03CA4F-6B17-485B-8D54-C5117052804A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{863166A4-E192-4C39-9809-D08F4666C17D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{863166A4-E192-4C39-9809-D08F4666C17D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{863166A4-E192-4C39-9809-D08F4666C17D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{863166A4-E192-4C39-9809-D08F4666C17D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

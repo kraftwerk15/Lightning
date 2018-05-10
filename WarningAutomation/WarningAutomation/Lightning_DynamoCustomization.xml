@@ -17,4 +17,12 @@
 			<category>Lightning.File</category>
 		</namespace>
 	</namespaces>
+	<assembly>
+		<name>LightningUI</name>
+	</assembly>
+	<namespaces>
+		<namespace name="SlabEdgeTypes">
+			<category>Lightning.Revit.SlabEdges</category>
+		</namespace>
+	</namespaces>
 </doc>

@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autodesk.Revit.DB;
-using Revit.Transaction;
-using RevitServices.Persistence;
-using RevitServices.Transactions;
 using Dynamo.Graph.Nodes;
+using RevitServices.Persistence;
 
 namespace Spring
 {
