@@ -21,26 +21,29 @@ namespace Spring
         /// <returns>Created Slab Edges.</returns>
         [NodeName("SlabEdgeByCurve")]
         [NodeCategory("Create")]
-        public static List<SlabEdge> CreateSlabEdge(List<List<Autodesk.DesignScript.Geometry.Line>> Line, Revit.Elements.Element slabEdgeType)
+        public static List<SlabEdge> CreateSlabEdge(List<List<Autodesk.DesignScript.Geometry.Geometry>> Line, Revit.Elements.Element slabEdgeType)
         {
             var doc = DocumentManager.Instance.CurrentDBDocument;
             List<SlabEdge> slab = new List<SlabEdge>();
-            ReferenceArray referenceArray = new ReferenceArray();
             ElementId id = Elements.UnwrapElement(slabEdgeType);
             SlabEdgeType unwrapSlabEdge = doc.GetElement(id) as SlabEdgeType;
+            Console.WriteLine(id);
+            
             try
             {
-                foreach(List<Autodesk.DesignScript.Geometry.Line> k in Line)
+                foreach(List<Autodesk.DesignScript.Geometry.Geometry> k in Line)
                 {
+                    ReferenceArray referenceArray = new ReferenceArray();
                     referenceArray.Clear();
                     //IEnumerable<ReferenceArray> reference = Line as IEnumerable<ReferenceArray>;
-                    foreach (Autodesk.DesignScript.Geometry.Line host in k)
+                    foreach (Autodesk.DesignScript.Geometry.Curve host in k)
                     {
                         //var curve = host.ToRevitType();
                         //var host = curve.ToProtoType();
                         //Reference j = host as Reference;
                         Curve curve = host.ToRevitType();
-                        referenceArray.Append(curve.Reference);
+                        Reference refc = curve.Reference;
+                        referenceArray.Append(refc);
                     }
                     TransactionManager.Instance.EnsureInTransaction(doc);
                     SlabEdge slabcreator = doc.Create.NewSlabEdge(unwrapSlabEdge, referenceArray);

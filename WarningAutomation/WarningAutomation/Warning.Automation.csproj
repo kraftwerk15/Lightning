@@ -54,9 +54,15 @@
     <Compile Include="ProjectExecution.cs" />
     <Compile Include="ProjectInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Revision.cs" />
     <Compile Include="SlabEdges.cs" />
     <Compile Include="SQL.cs" />
+    <Compile Include="Views.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
@@ -75,17 +81,15 @@
       <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.0.4714\lib\net45\DynamoApplications.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DynamoCore, Version=2.0.0.4714, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.0.4714\lib\net45\DynamoCore.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DynamoCore">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoCore.dll</HintPath>
     </Reference>
     <Reference Include="DynamoInstallDetective, Version=2.0.0.4714, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.0.4714\lib\net45\DynamoInstallDetective.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DynamoServices, Version=2.0.0.4714, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamoVisualProgramming.DynamoServices.2.0.0.4714\lib\net45\DynamoServices.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DynamoServices">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoServices.dll</HintPath>
     </Reference>
     <Reference Include="DynamoShapeManager, Version=2.0.0.4714, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.0.4714\lib\net45\DynamoShapeManager.dll</HintPath>
@@ -101,19 +105,15 @@
     </Reference>
     <Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ProtoCore, Version=2.0.0.4714, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.0.4714\lib\net45\ProtoCore.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="ProtoCore">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\ProtoCore.dll</HintPath>
     </Reference>
     <Reference Include="ProtoGeometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.0.0.4714\lib\net45\ProtoGeometry.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\ProtoGeometry.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPI">
@@ -126,7 +126,6 @@
     </Reference>
     <Reference Include="RevitServices">
       <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Revit\2\Revit_2018\RevitServices.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Console, Version=4.0.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -134,6 +133,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
       <Private>False</Private>
@@ -150,12 +150,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LightningImages.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\Snow.Directory.GetFilesInAllFolders.Large.png" />
     <None Include="Resources\Snow.Directory.GetFilesInAllFolders.Small.png" />
     <None Include="Resources\Snow.Directory.GetFilesInThisFolder.Large.png" />
@@ -164,8 +169,8 @@
     <None Include="Resources\Snow.Directory.GetFoldersinFolder.Small.png" />
     <None Include="Resources\Spring.Elements.FamilyInstanceByCurve.Large.png" />
     <None Include="Resources\Spring.Elements.FamilyInstanceByCurve.Small.png" />
-    <None Include="Resources\Spring.Elements.ViewFamilyType.Large.png" />
-    <None Include="Resources\Spring.Elements.ViewFamilyType.Small.png" />
+    <None Include="Resources\Spring.Views.ViewFamilyType.Large.png" />
+    <None Include="Resources\Spring.Views.ViewFamilyType.Small.png" />
     <None Include="Resources\Spring.ProjectInformation.GetProjectName.Large.png" />
     <None Include="Resources\Spring.ProjectInformation.GetProjectName.Small.png" />
     <None Include="Resources\Spring.ProjectInformation.GetProjectNumber.Large.png" />
@@ -215,6 +220,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lightning_DynamoCustomization.xml" />
+    <None Include="Resources\Spring.SlabEdges.SlabEdgeTypeByName.Small.png" />
+    <None Include="Resources\Spring.SlabEdges.SlabEdgeTypeByName.Large.png" />
+    <None Include="Resources\Spring.SlabEdges.CreateSlabEdge.Small.png" />
+    <None Include="Resources\Spring.SlabEdges.CreateSlabEdge.Large.png" />
+    <None Include="Resources\Spring.Views.CompareViewFamilyTypes.Small.png" />
+    <None Include="Resources\Spring.Views.CompareViewFamilyTypes.Large.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

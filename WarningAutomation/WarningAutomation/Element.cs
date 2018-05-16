@@ -129,29 +129,6 @@ namespace Spring
             FamilySymbol familySymbol = symbol as FamilySymbol;
             return symbol.ToDSType(false);
         }
-
-        /// <summary>
-        /// Given a ViewFamilyType name as a string, attempts to find the ViewFamilyType in the Active Document.
-        /// </summary>
-        /// <param name="ViewFamilyType">The View Type as a string.</param>
-        /// <returns>The ViewFamilyType as an element.</returns>
-        public static Revit.Elements.Element ViewFamilyType(string ViewFamilyType)
-        {
-            List<Autodesk.Revit.DB.Element> collector = new List<Autodesk.Revit.DB.Element>();
-            var doc = DocumentManager.Instance.CurrentDBDocument;
-            var e = new FilteredElementCollector(doc);
-
-            e.OfClass(typeof(ViewFamilyType));
-            var elements = e.ToElements();
-
-            Revit.Elements.Element hold = elements.Where(x => x.Name == ViewFamilyType).FirstOrDefault().ToDSType(true);
-            if (hold == null)
-            {
-                return null;
-            }
-            else
-                return hold;
-        }
     }
 }
 
