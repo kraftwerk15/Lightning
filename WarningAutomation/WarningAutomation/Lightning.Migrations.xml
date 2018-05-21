@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<migrations>
+  <priorNameHint>
+    <oldName>Spring.Elements.FamilyInstanceByCurve</oldName>
+    <newName>Spring.FamilyInstance.ByCurve</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>Spring.Phase.ElementExistsInPhase</oldName>
+    <newName>Spring.Elements.ExistsInPhase</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>Spring.Phase.GetPhaseStatus</oldName>
+    <newName>Spring.Elements.GetPhaseStatus</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>Spring.Elements.GetFamilyType</oldName>
+    <newName>Spring.FamilyType.GetFamilyType</newName>
+  </priorNameHint>
+</migrations>

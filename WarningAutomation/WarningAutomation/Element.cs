@@ -11,7 +11,7 @@ using Dynamo.Graph.Nodes;
 using System.Collections;
 using Revit.Elements;
 using Revit.GeometryConversion;
-
+using Autodesk.DesignScript.Runtime;
 
 namespace Spring
 {
@@ -55,43 +55,6 @@ namespace Spring
         }
 
         /// <summary>
-        /// Create a new Line-Based Family Instance given a line, the family, and the view to place the new family.
-        /// </summary>
-        /// <param name="Curve">The Line to create the Symbol.</param>
-        /// <param name="FamilyName">The family name of the Line-based family.</param>
-        /// <param name="FamilyType">The family type name of the Line-based family.</param>
-        /// <param name="DestinationView">The view to create the family instance.</param>
-        /// <returns>The Family Instances.</returns>
-        [NodeName("FamilyInstanceByCurve")]
-        [NodeCategory("Create")]
-        public static List<Autodesk.Revit.DB.FamilyInstance> FamilyInstanceByCurve(List<Autodesk.DesignScript.Geometry.Curve> Curve, string FamilyName, string FamilyType, Revit.Elements.Views.FloorPlanView DestinationView)
-        {
-            var doc = DocumentManager.Instance.CurrentDBDocument;
-            List<Autodesk.Revit.DB.FamilyInstance> famColl = new List<Autodesk.Revit.DB.FamilyInstance>();
-
-            ElementId viewId = UnwrapElement(DestinationView);
-            View finalView = doc.GetElement(viewId) as View;
-            FamilySymbol symbol = GetSymbol(doc, FamilyName, FamilyType);
-            try
-            {
-                TransactionManager.Instance.EnsureInTransaction(doc);
-                foreach (Autodesk.DesignScript.Geometry.Curve i in Curve)
-                {
-                    Line j = i.ToRevitType() as Line;
-                    Autodesk.Revit.DB.FamilyInstance instance = doc.Create.NewFamilyInstance(j, symbol, finalView);
-                    instance.ToDSType(true);
-                    famColl.Add(instance);
-                };
-                TransactionManager.Instance.TransactionTaskDone();
-                return famColl;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        /// <summary>
         /// Dynamo Unwrapper
         /// </summary>
         /// <param name="element"></param>
@@ -111,23 +74,64 @@ namespace Spring
         /// <param name="familyName"></param>
         /// <param name="symbolName"></param>
         /// <returns></returns>
-        private static FamilySymbol GetSymbol(Autodesk.Revit.DB.Document document, string familyName, string symbolName)
+        [IsVisibleInDynamoLibrary(false)]
+        internal static FamilySymbol GetSymbol(Autodesk.Revit.DB.Document document, string familyName, string symbolName)
         {
             return new FilteredElementCollector(document).OfClass(typeof(Autodesk.Revit.DB.Family)).OfType<Autodesk.Revit.DB.Family>().FirstOrDefault(f => f.Name.Equals(familyName))?.GetFamilySymbolIds().Select(id => document.GetElement(id)).OfType<FamilySymbol>().FirstOrDefault(symbol => symbol.Name.Equals(symbolName));
         }
 
+        
         /// <summary>
-        /// Given a Family Name and a Family Type as strings, this node will find the Family Type if it exists in the project for your use.
+        /// If the Element exists in this phase, then it will be returned in the list. "New", "Existing", "Temporary" values are returned.
         /// </summary>
-        /// <param name="FamilyName">The family name of the family type we are trying to find.</param>
-        /// <param name="FamilyType">The family type from the family.</param>
-        /// <returns>The FamilyType as the family type.</returns>
-        public static Revit.Elements.Element GetFamilyType(string FamilyName, string FamilyType)
+        /// <param name="Element"></param>
+        /// <param name="Phase"></param>
+        /// <returns>A List of Elements that exist in this Phase.</returns>
+        [NodeCategory("Query")]
+        public static List<Revit.Elements.Element> ExistsInPhase(List<Revit.Elements.Element> Element, Revit.Elements.Element Phase)
         {
-            var doc = DocumentManager.Instance.CurrentDBDocument;
-            FamilySymbol symbol = GetSymbol(doc, FamilyName, FamilyType);
-            FamilySymbol familySymbol = symbol as FamilySymbol;
-            return symbol.ToDSType(false);
+            List<Revit.Elements.Element> vs = new List<Revit.Elements.Element>();
+            List<string> phaseStat = GetPhaseStatus(Element, Phase);
+            for (int i = 0; i < phaseStat.Count; i++)
+            {
+                string item = phaseStat[i];
+                Revit.Elements.Element element = Element[i];
+                switch (item)
+                {
+                    case "New":
+                        vs.Add(element);
+                        break;
+                    case "Existing":
+                        vs.Add(element);
+                        break;
+                    case "Temporary":
+                        vs.Add(element);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return vs;
+        }
+
+        /// <summary>
+        /// The Phase Status of the Element. See RevitAPI Documentation and search for GetPhaseStatus for more information.
+        /// </summary>
+        /// <param name="Element">The Element of the Phase to check.</param>
+        /// <param name="Phase">The Phase to check.</param>
+        /// <returns>A string value to inform user of the status.</returns>
+        [NodeCategory("Query")]
+        public static List<string> GetPhaseStatus(List<Revit.Elements.Element> Element, Revit.Elements.Element Phase)
+        {
+            List<string> vs = new List<string>();
+            ElementId phaseID = UnwrapElement(Phase);
+            foreach (Revit.Elements.Element v in Element)
+            {
+                ElementId id = UnwrapElement(v);
+                string phaseStat = Spring.Phase.GetPhaseStatus(id, phaseID);
+                vs.Add(phaseStat);
+            }
+            return vs;
         }
     }
 }

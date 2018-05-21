@@ -81,7 +81,7 @@ namespace Spring
 
                 }
             }
-            return new Dictionary<string, List<List<Revit.Elements.Element>>>
+            return new Dictionary<string, List<List<Revit.Elements.Element>>>()
             {
                 { "View Family Type Found", found },
                 { "View Family Type Not Found", not }
@@ -102,7 +102,6 @@ namespace Spring
             Revit.Elements.Element level = finalView.GenLevel.ToDSType(true);
             return level;
         }
-
 
     }
 }

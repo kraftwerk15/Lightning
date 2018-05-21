@@ -22,7 +22,7 @@ namespace Spring
         /// <param name="Transact">Should this process be completed? This is set by default not to run.</param>
         /// <returns>The Synchronized Event.</returns>
         [NodeCategory("Action")]
-        public static bool SynchronizeWithCentral_Specific(
+        public static bool SynchronizeWithCentralSpecific(
             bool StandardWorksets = true, bool ViewWorksets = true, bool FamilyWorksets = true,bool UserWorksets = true,bool CheckedOutElements = true, 
             bool Compact = true, bool SaveLocalBefore = true, bool SaveLocalAfter = true, string Comment = "", bool Transact = false)
         {
@@ -66,7 +66,7 @@ namespace Spring
         /// <param name="Transact">Should this process be completed? This is set by default not to run.</param>
         /// <returns>The Synchronized Event.</returns>
         [NodeCategory("Action")]
-        public static bool SynchronizeWithCentral_General(bool Compact = true, bool SaveLocalBefore = true, bool SaveLocalAfter = true, string Comment = "", bool Transact = false)
+        public static bool SynchronizeWithCentralGeneral(bool Compact = true, bool SaveLocalBefore = true, bool SaveLocalAfter = true, string Comment = "", bool Transact = false)
         {
             Autodesk.Revit.DB.Document doc = DocumentManager.Instance.CurrentDBDocument;
             TransactWithCentralOptions transactOptions = new TransactWithCentralOptions();

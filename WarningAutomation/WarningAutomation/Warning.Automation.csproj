@@ -48,7 +48,10 @@
     <Compile Include="BasicFileInfo.cs" />
     <Compile Include="Directory.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="FamilyInstance.cs" />
+    <Compile Include="FamilyType.cs" />
     <Compile Include="Journal.cs" />
+    <Compile Include="Phase.cs" />
     <Compile Include="Presets.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="ProjectExecution.cs" />
@@ -167,8 +170,8 @@
     <None Include="Resources\Snow.Directory.GetFilesInThisFolder.Small.png" />
     <None Include="Resources\Snow.Directory.GetFoldersinFolder.Large.png" />
     <None Include="Resources\Snow.Directory.GetFoldersinFolder.Small.png" />
-    <None Include="Resources\Spring.Elements.FamilyInstanceByCurve.Large.png" />
-    <None Include="Resources\Spring.Elements.FamilyInstanceByCurve.Small.png" />
+    <None Include="Resources\Spring.FamilyInstance.ByCurve.Large.png" />
+    <None Include="Resources\Spring.FamilyInstance.ByCurve.Small.png" />
     <None Include="Resources\Spring.Views.ViewFamilyType.Large.png" />
     <None Include="Resources\Spring.Views.ViewFamilyType.Small.png" />
     <None Include="Resources\Spring.ProjectInformation.GetProjectName.Large.png" />
@@ -179,10 +182,10 @@
     <None Include="Resources\Spring.ProjectInformation.SetProjectName.Small.png" />
     <None Include="Resources\Spring.ProjectInformation.SetProjectNumber.Large.png" />
     <None Include="Resources\Spring.ProjectInformation.SetProjectNumber.Small.png" />
-    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_General.Large.png" />
-    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_General.Small.png" />
-    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_Specific.Large.png" />
-    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentral_Specific.Small.png" />
+    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentralGeneral.Large.png" />
+    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentralGeneral.Small.png" />
+    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentralSpecific.Large.png" />
+    <None Include="Resources\Spring.Synchronization.SynchronizeWithCentralSpecific.Small.png" />
     <None Include="Resources\Thunder.IdentifyYear.FileSize.Large.png" />
     <None Include="Resources\Thunder.IdentifyYear.FileSize.Small.png" />
     <None Include="Resources\Thunder.IdentifyYear.GetRevitYearList.Large.png" />
@@ -219,7 +222,18 @@
     <None Include="Resources\TidalWave.SQL.Update.Small.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Lightning.Migrations.xml" />
     <Content Include="Lightning_DynamoCustomization.xml" />
+    <None Include="Resources\Spring.FamilyType.GetFamilyType.Small.png" />
+    <None Include="Resources\Spring.FamilyType.GetFamilyType.Large.png" />
+    <None Include="Resources\Spring.Views.AssociatedLevel.Small.png" />
+    <None Include="Resources\Spring.Views.AssociatedLevel.Large.png" />
+    <None Include="Resources\Spring.Elements.GetPhaseStatus.Small.png" />
+    <None Include="Resources\Spring.Elements.GetPhaseStatus.Large.png" />
+    <None Include="Resources\Spring.Elements.ExistsInPhase.Small.png" />
+    <None Include="Resources\Spring.Elements.ExistsInPhase.Large.png" />
+    <None Include="Resources\Spring.FamilyInstance.GetToFromRoom.Small.png" />
+    <None Include="Resources\Spring.FamilyInstance.GetToFromRoom.Large.png" />
     <None Include="Resources\Spring.SlabEdges.SlabEdgeTypeByName.Small.png" />
     <None Include="Resources\Spring.SlabEdges.SlabEdgeTypeByName.Large.png" />
     <None Include="Resources\Spring.SlabEdges.CreateSlabEdge.Small.png" />
