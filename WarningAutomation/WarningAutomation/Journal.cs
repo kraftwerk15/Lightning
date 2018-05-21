@@ -779,5 +779,8 @@ namespace Thunder
             };
         }
 
+        [NodeCategory("Action")]
+        [MultiReturn(new[] {"","",""})]
+        public static Dictionary<string, List<dynamic>> DetachSave(string workspacePath, List<string> FolderLocations)
     }
 }
