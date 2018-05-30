@@ -96,4 +96,43 @@ namespace Spring
         }
     }
 
+    public static class Save
+    {
+        /// <summary>
+        /// Gives you the ability to save as a document. Particularly after detaching a batch of files.
+        /// </summary>
+        /// <param name="path">File Path to save the new file.</param>
+        /// <param name="compact">Should the file be compacted.</param>
+        /// <param name="maximumBackups">Set the maximum number of backups.</param>
+        /// <param name="workshare"></param>
+        /// <param name="worksetConfiguration"></param>
+        /// <returns>If the file was saved, the node will return true.</returns>
+        [NodeCategory("Action")]
+        public static bool SaveAs(string path, bool workshare, bool compact = false, int maximumBackups = 10)
+        {
+            Autodesk.Revit.DB.Document doc = DocumentManager.Instance.CurrentDBDocument;
+            SaveAsOptions saveAs = new SaveAsOptions
+            {
+                Compact = compact,
+                MaximumBackups = maximumBackups
+            };
+            if (workshare)
+            {
+                WorksharingSaveAsOptions worksharing = new WorksharingSaveAsOptions();
+                SimpleWorksetConfiguration simple = SimpleWorksetConfiguration.AskUserToSpecify;
+                worksharing.OpenWorksetsDefault = simple;
+                worksharing.SaveAsCentral = true;
+                saveAs.SetWorksharingOptions(worksharing);
+            }
+            try
+            {
+                doc.SaveAs(path, saveAs);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
 }

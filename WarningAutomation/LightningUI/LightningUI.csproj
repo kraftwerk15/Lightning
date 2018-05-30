@@ -7,8 +7,8 @@
     <ProjectGuid>{863166A4-E192-4C39-9809-D08F4666C17D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightningUI</RootNamespace>
-    <AssemblyName>LightningUI</AssemblyName>
+    <RootNamespace>LightningUI.Utilities</RootNamespace>
+    <AssemblyName>Lightning2UI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\LightningUI.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Lightning2UI.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -88,9 +88,13 @@
     <Compile Include="SlabEdgeTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIUtilities.cs" />
+    <Compile Include="WorksetConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lightning2UI_DynamoCustomization.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

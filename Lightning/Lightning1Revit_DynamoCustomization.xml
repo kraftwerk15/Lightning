@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+	<assembly>
+		<name>Lightning1Revit</name>
+	</assembly>
+	<namespaces>
+		<namespace name="Spring">
+			<category>Lightning.Revit</category>
+		</namespace>
+	</namespaces>
+</doc>

@@ -114,6 +114,7 @@ namespace TidalWave
             }
             return tempConn;
         }
+
         internal static List<int> InsertInto(string newConn, string prjNum, DateTime dateTime)
         {
             SqlConnection tempConn = ConnectionOpen(newConn);

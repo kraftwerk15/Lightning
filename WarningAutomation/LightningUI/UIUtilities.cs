@@ -9,10 +9,11 @@ using ProtoCore.AST.AssociativeAST;
 using Dynamo.Utilities;
 using CoreNodeModels;
 using RevitServices.Persistence;
+using Autodesk.DesignScript.Runtime;
 
 namespace LightningUI.Utilities
 {
-
+    [IsVisibleInDynamoLibrary(false)]
     public abstract class CustomGenericEnumerationDropDown : RevitDropDownBase
     {
         protected CustomGenericEnumerationDropDown(string name, Type enumerationType) : base(name)
@@ -38,7 +39,7 @@ namespace LightningUI.Utilities
             SelectedIndex = 0;
             return SelectionState.Done;
         }
-
+        [IsVisibleInDynamoLibrary(false)]
         public override IEnumerable<AssociativeNode> BuildOutputAst(List<AssociativeNode> inputAstNodes)
         {
             if (Items.Count == 0 || Items.Count == -1)
@@ -59,6 +60,7 @@ namespace LightningUI.Utilities
     /// This class populates a dropdown with all Revit elements of the specified type.
     /// It uses a filtered element collector filtering by class.
     /// </summary>
+    /// [IsVisibleInDynamoLibrary(false)]
     public abstract class CustomRevitElementDropDown : RevitDropDownBase
     {
         /// <summary>
@@ -145,6 +147,7 @@ namespace LightningUI.Utilities
         }
     }
 
+    [IsVisibleInDynamoLibrary(false)]
     public class DropDownItemEqualityComparer : IEqualityComparer<DynamoDropDownItem>
     {
         public bool Equals(DynamoDropDownItem x, DynamoDropDownItem y)
