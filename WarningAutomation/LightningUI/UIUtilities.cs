@@ -9,19 +9,25 @@ using ProtoCore.AST.AssociativeAST;
 using Dynamo.Utilities;
 using CoreNodeModels;
 using RevitServices.Persistence;
+using Autodesk.DesignScript.Runtime;
+using Dynamo.Graph.Nodes;
 
 namespace LightningUI.Utilities
 {
-
+    //[IsVisibleInDynamoLibrary(false)]
     public abstract class CustomGenericEnumerationDropDown : RevitDropDownBase
     {
-        protected CustomGenericEnumerationDropDown(string name, Type enumerationType) : base(name)
+        public CustomGenericEnumerationDropDown(string name, Type enumerationType) : base(name)
         {
             EnumerationType = enumerationType;
             PopulateItems();
         }
 
-        public Type EnumerationType;
+        public Type EnumerationType
+        {
+            get;
+            set;
+        }
 
         protected override SelectionState PopulateItemsCore(string currentSelection)
         {
@@ -38,7 +44,7 @@ namespace LightningUI.Utilities
             SelectedIndex = 0;
             return SelectionState.Done;
         }
-
+        //[IsVisibleInDynamoLibrary(false)]
         public override IEnumerable<AssociativeNode> BuildOutputAst(List<AssociativeNode> inputAstNodes)
         {
             if (Items.Count == 0 || Items.Count == -1)
@@ -59,14 +65,17 @@ namespace LightningUI.Utilities
     /// This class populates a dropdown with all Revit elements of the specified type.
     /// It uses a filtered element collector filtering by class.
     /// </summary>
+    //[IsVisibleInDynamoLibrary(false)]
     public abstract class CustomRevitElementDropDown : RevitDropDownBase
     {
+
+        protected CustomRevitElementDropDown(string name) : base(name) {  }
         /// <summary>
         /// Generic Revit Element Class Dropdown Node
         /// </summary>
         /// <param name="name">Name of the Node</param>
         /// <param name="elementType">Type of Revit Element to display</param>
-        protected CustomRevitElementDropDown(string name, Type elementType) : base(name) { ElementType = elementType; PopulateDropDownItems(); }
+        protected CustomRevitElementDropDown(string name, Type elementType, IEnumerable<PortModel> inPorts, IEnumerable<PortModel> outPorts) : base(name) { ElementType = elementType; PopulateDropDownItems(); }
 
         /// <summary>
         /// Type of Element
@@ -75,6 +84,7 @@ namespace LightningUI.Utilities
         {
             get;
         }
+        public static string name { get; }
 
         protected override SelectionState PopulateItemsCore(string currentSelection)
         {
@@ -84,6 +94,7 @@ namespace LightningUI.Utilities
         /// <summary>
         /// Populate the Dropdown menu
         /// </summary>
+        //[IsVisibleInDynamoLibrary(false)]
         public void PopulateDropDownItems()
         {
             if (ElementType == null) return;
@@ -120,9 +131,10 @@ namespace LightningUI.Utilities
             Items = Items.OrderBy(x => x.Name).ToObservableCollection();
         }
 
-        /// <summary>
-        /// Cast the selected element to a dynamo node
-        /// </summary>
+        //<summary>
+        //Cast the selected element to a dynamo node
+        //</summary>
+        //[IsVisibleInDynamoLibrary(false)]
         public override IEnumerable<AssociativeNode> BuildOutputAst(List<AssociativeNode> inputAstNodes)
         {
             // If there are no elements in the dropdown or the selected Index is invalid return a Null node.
@@ -145,6 +157,7 @@ namespace LightningUI.Utilities
         }
     }
 
+    //[IsVisibleInDynamoLibrary(false)]
     public class DropDownItemEqualityComparer : IEqualityComparer<DynamoDropDownItem>
     {
         public bool Equals(DynamoDropDownItem x, DynamoDropDownItem y)

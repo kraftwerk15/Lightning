@@ -20,7 +20,8 @@ namespace Thunder
         /// </summary>
         /// <param name="FilePath">An array (list) of folders where the Revit files may be located. Attempt to scope to the lowest folders, i.e. do not enter c:/</param>
         /// <param name="prjNum">The nomenclature of what to look for. Example: 14565_ Revit File_ R18.rvt, you should insert 14565 as a string.</param>
-        /// <returns></returns>
+        /// <returns>Nested list of Revit Builds and Central File Paths of input files.</returns>
+        /// <search>central, file, path, model, project, number</search>
         [NodeCategory("Query")]
         public static List<List<string>> GetRevitYearList(string[] FilePath, string prjNum)
         {
@@ -57,6 +58,7 @@ namespace Thunder
         /// <param name="FilePath">Insert the File Path under which the Revit file is located. This should not include the File Name, just the File Path.</param>
         /// <param name="prjNum">The nomenclature of what to look for. Example: 14565_ Revit File_ R18.rvt, you should insert 14565 as a string.</param>
         /// <returns>This returns a list of successful Single Revit File Year Version.</returns>
+        /// <search>central, file, path, model, project, number</search>
         [NodeCategory("Query")]
         public static List<dynamic> GetRevitYearSingle(string FilePath, string prjNum)
         {
@@ -232,6 +234,7 @@ namespace Thunder
         /// </summary>
         /// <param name="centralPath">Central File Path.</param>
         /// <returns>File Size in Kilobytes.</returns>
+        /// <search>central, file, path, model, size, megs, mega, byte, kilo</search>
         [NodeCategory("Query")]
         public static double FileSize(string centralPath)
         {

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <doc>
 	<assembly>
-		<name>Lightning</name>
+		<name>Lightning0WA</name>
 	</assembly>
 	<namespaces>
 		<namespace name="Thunder">
@@ -10,19 +10,11 @@
 		<namespace name="TidalWave">
 			<category>Lightning.SQL</category>
 		</namespace>
-		<namespace name="Spring">
-			<category>Lightning.Revit</category>
-		</namespace>
 		<namespace name="Snow">
 			<category>Lightning.File</category>
 		</namespace>
-	</namespaces>
-	<assembly>
-		<name>LightningUI</name>
-	</assembly>
-	<namespaces>
-		<namespace name="SlabEdgeTypes">
-			<category>Lightning.Revit.SlabEdges</category>
-		</namespace>
-	</namespaces>
+    <namespace name="Wind">
+      <category>Lightning.Core</category>
+    </namespace>
+  </namespaces>
 </doc>

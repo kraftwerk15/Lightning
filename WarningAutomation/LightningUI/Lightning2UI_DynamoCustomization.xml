@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+  <assembly>
+    <name>Lightning2UI</name>
+  </assembly>
+  <namespaces>
+    <namespace name="WorksetConfigure">
+      <category>Lightning.Revit</category>
+    </namespace>
+    <namespace name="SlabEdges">
+      <category>Lightning.Revit</category>
+    </namespace>
+  </namespaces>
+</doc>

@@ -1,11 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Revit.Elements;
 using RevitServices.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Spring
 {
@@ -17,6 +12,7 @@ namespace Spring
         /// <param name="FamilyName">The family name of the family type we are trying to find.</param>
         /// <param name="FamilyType">The family type from the family.</param>
         /// <returns>The FamilyType as the family type.</returns>
+        /// <search>family, type, instance, name, string, symbol</search>
         public static Revit.Elements.Element GetFamilyType(string FamilyName, string FamilyType)
         {
             var doc = DocumentManager.Instance.CurrentDBDocument;
