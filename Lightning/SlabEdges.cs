@@ -19,6 +19,7 @@ namespace Spring
         /// <param name="Floor">Curves</param>
         /// <param name="SlabEdgeType">Slab Edge Type</param>
         /// <returns>Created Slab Edges.</returns>
+        /// <search>create, slab, edge, reference, line, edge, curve</search>
         [NodeName("SlabEdgeByCurve")]
         [NodeCategory("Create")]
         public static List<SlabEdge> ByReferenceArray(Revit.Elements.Element Floor, Revit.Elements.Element SlabEdgeType)
@@ -134,7 +135,8 @@ namespace Spring
         /// Find Slabe Edge Types by Name.
         /// </summary>
         /// <param name="TypeName">The Type Name to find.</param>
-        /// <returns></returns>
+        /// <returns>Slab Edge type if found</returns>
+        /// <search>slab, edge, type, name, floor</search>
         [NodeName("SlabEdgeTypeByName")]
         [NodeCategory("Query")]
         public static Revit.Elements.Element SlabEdgeTypeByName(string TypeName)

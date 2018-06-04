@@ -18,6 +18,7 @@ namespace Spring
         /// <param name="FamilyInstance">Door or Window</param>
         /// <param name="Phase">The Phase to check against.</param>
         /// <returns>A List of From and To Rooms.</returns>
+        /// <search>host, door, window, from, to, flip, room</search>
         [NodeCategory("Action")]
         [MultiReturn(new[] { "From Room", "To Room" })]
         public static Dictionary<string, List<Revit.Elements.Element>> GetToFromRoom(List<Revit.Elements.Element> FamilyInstance, Revit.Elements.Element Phase)
@@ -66,6 +67,7 @@ namespace Spring
         /// <param name="FamilyType">The family type name of the Line-based family.</param>
         /// <param name="DestinationView">The view to create the family instance.</param>
         /// <returns>The Family Instances.</returns>
+        /// <search>line, based, sweep, create, family, curve, line, edge</search>
         [NodeName("FamilyInstanceByCurve")]
         [NodeCategory("Create")]
         public static List<Autodesk.Revit.DB.FamilyInstance> ByCurve(List<Autodesk.DesignScript.Geometry.Curve> Curve, string FamilyName, string FamilyType, Revit.Elements.Views.FloorPlanView DestinationView)

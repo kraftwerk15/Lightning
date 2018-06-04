@@ -17,8 +17,9 @@ namespace Spring
         /// <param name="SourceView">View in which to get elements.</param>
         /// <param name="Element">A collection of Elements.</param>
         /// <param name="DestinationView">View in which to send elements.</param>
-        /// <returns></returns>
+        /// <returns>Collection of Element ID's that were copied to the view.</returns>
         [NodeCategory("Action")]
+        [IsVisibleInDynamoLibrary(false)]
         public static ICollection<ElementId> CopyPaste(List<Revit.Elements.Element> Element, Revit.Elements.Views.View SourceView, Revit.Elements.Views.View DestinationView)
         {
             var doc = DocumentManager.Instance.CurrentDBDocument;
@@ -81,6 +82,7 @@ namespace Spring
         /// <param name="Element"></param>
         /// <param name="Phase"></param>
         /// <returns>A List of Elements that exist in this Phase.</returns>
+        /// <search>element, family, exists, in, phase, current, future, past, status</search>
         [NodeCategory("Query")]
         public static List<Revit.Elements.Element> ExistsInPhase(List<Revit.Elements.Element> Element, Revit.Elements.Element Phase)
         {
@@ -114,6 +116,7 @@ namespace Spring
         /// <param name="Element">The Element of the Phase to check.</param>
         /// <param name="Phase">The Phase to check.</param>
         /// <returns>A string value to inform user of the status.</returns>
+        /// <search>get, phase, status, element, family, current, past, future, existing, new, construction</search>
         [NodeCategory("Query")]
         public static List<string> GetPhaseStatus(List<Revit.Elements.Element> Element, Revit.Elements.Element Phase)
         {

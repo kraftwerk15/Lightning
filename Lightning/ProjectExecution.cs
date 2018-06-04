@@ -21,6 +21,7 @@ namespace Spring
         /// <param name="Comment">Provide a custom message.</param>
         /// <param name="Transact">Should this process be completed? This is set by default not to run.</param>
         /// <returns>The Synchronized Event.</returns>
+        /// <search>sync, synchronize, with, central, event, workshare, worksharing, specific, save, project</search>
         [NodeCategory("Action")]
         public static bool SynchronizeWithCentralSpecific(
             bool StandardWorksets = true, bool ViewWorksets = true, bool FamilyWorksets = true,bool UserWorksets = true,bool CheckedOutElements = true, 
@@ -65,6 +66,7 @@ namespace Spring
         /// <param name="Comment">Provide a custom message.</param>
         /// <param name="Transact">Should this process be completed? This is set by default not to run.</param>
         /// <returns>The Synchronized Event.</returns>
+        /// <search>sync, synchronize, with, central, event, workshare, worksharing, save, project</search>
         [NodeCategory("Action")]
         public static bool SynchronizeWithCentralGeneral(bool Compact = true, bool SaveLocalBefore = true, bool SaveLocalAfter = true, string Comment = "", bool Transact = false)
         {
@@ -99,16 +101,15 @@ namespace Spring
     public static class Save
     {
         /// <summary>
-        /// Gives you the ability to save as a document. Particularly after detaching a batch of files.
+        /// Gives you the ability to save a document locally without creating it as a new central. Particularly after detaching a batch of files.
         /// </summary>
         /// <param name="path">File Path to save the new file.</param>
         /// <param name="compact">Should the file be compacted.</param>
         /// <param name="maximumBackups">Set the maximum number of backups.</param>
-        /// <param name="workshare"></param>
-        /// <param name="worksetConfiguration"></param>
         /// <returns>If the file was saved, the node will return true.</returns>
+        /// <search>save, project, local</search>
         [NodeCategory("Action")]
-        public static bool SaveAs(string path, bool workshare, bool compact = false, int maximumBackups = 10)
+        public static bool ProjectAsLocal(string path, bool compact = false, int maximumBackups = 10)
         {
             Autodesk.Revit.DB.Document doc = DocumentManager.Instance.CurrentDBDocument;
             SaveAsOptions saveAs = new SaveAsOptions
@@ -116,14 +117,62 @@ namespace Spring
                 Compact = compact,
                 MaximumBackups = maximumBackups
             };
-            if (workshare)
+            try
             {
-                WorksharingSaveAsOptions worksharing = new WorksharingSaveAsOptions();
-                SimpleWorksetConfiguration simple = SimpleWorksetConfiguration.AskUserToSpecify;
-                worksharing.OpenWorksetsDefault = simple;
-                worksharing.SaveAsCentral = true;
-                saveAs.SetWorksharingOptions(worksharing);
+                doc.SaveAs(path, saveAs);
+                return true;
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Gives you the ability to save this document as a new central file. Particularly after detaching a batch of files.
+        /// </summary>
+        /// <param name="path">The file path to save the file. This should include the path, the file name, and the file extension.</param>
+        /// <param name="compact">Should the file be compacted?</param>
+        /// <param name="maximumBackups">What is the number of backups the file should create automatically while users are working?</param>
+        /// <param name="WorksetConfiguration">What is the WorksetConfiguration? Recommend using Lightning node "Workset Configuration".</param>
+        /// <returns>Successfully completed.</returns>
+        /// <search>save, project, as, central</search>
+        [NodeCategory("Action")]
+        public static bool ProjectAsCentral(string path, bool compact = false, int maximumBackups = 10, string WorksetConfiguration = "AskUserToSpecify")
+        {
+            Autodesk.Revit.DB.Document doc = DocumentManager.Instance.CurrentDBDocument;
+            SaveAsOptions saveAs = new SaveAsOptions
+            {
+                Compact = compact,
+                MaximumBackups = maximumBackups
+            };
+            SimpleWorksetConfiguration simple = new SimpleWorksetConfiguration();
+            WorksharingSaveAsOptions worksharing = new WorksharingSaveAsOptions();
+            if(WorksetConfiguration == "AskUserToSpecify")
+            {
+                simple = SimpleWorksetConfiguration.AskUserToSpecify;
+            }
+            else if(WorksetConfiguration == "AllEditable")
+            {
+                simple = SimpleWorksetConfiguration.AllEditable;
+            }
+            else if(WorksetConfiguration == "AllWorksets")
+            {
+                simple = SimpleWorksetConfiguration.AllWorksets;
+            }
+            else if(WorksetConfiguration == "LastViewed")
+            {
+                simple = SimpleWorksetConfiguration.LastViewed;
+            }
+            else
+            {
+                throw new NotSupportedException("Workset Configuration may only be one of four types: AskUserToSpecify, AllEditable, AllWorksets, or LastViewed. Use WorksetConfiguration node in Lightning package for seamless execution.");
+            }
+
+            worksharing.OpenWorksetsDefault = simple;
+            worksharing.SaveAsCentral = true;
+            saveAs.SetWorksharingOptions(worksharing);
+            
             try
             {
                 doc.SaveAs(path, saveAs);

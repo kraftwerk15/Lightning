@@ -196,6 +196,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lightning0WA_DynamoCustomization.xml" />
+    <None Include="Resources\Wind.Email.Send.Small.png" />
+    <None Include="Resources\Wind.Email.Send.Large.png" />
     <None Include="Resources\Thunder.Journal.ExecuteJournal.Small.png" />
     <None Include="Resources\Thunder.Journal.ExecuteJournal.Large.png" />
     <None Include="Resources\Thunder.Journal.DetachModel.Small.png" />

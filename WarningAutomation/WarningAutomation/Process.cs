@@ -21,6 +21,7 @@ namespace Thunder
         /// <param name="processPath">The path to the process to execute.</param>
         /// <param name="args">The command line arguments to the process.</param>
         /// <returns>The exit code for the process.</returns>
+        /// <search>execute, start, process, run, program, journal</search>
         [NodeCategory("Create")]
         public static int ByPathAndArguments(string processPath, string args)
         {
@@ -60,6 +61,7 @@ namespace Thunder
         /// </summary>
         /// <param name="toggle">Should the current process be terminted?</param>
         /// <returns>The exit code for the process.</returns>
+        /// <search>stop, kill, process, program</search>
         [NodeCategory("Action")]
         public static int KillCurrentProcess(bool toggle = false)
         {

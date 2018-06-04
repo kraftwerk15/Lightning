@@ -17,7 +17,8 @@ namespace TidalWave
         /// Open a SQL Connection.
         /// </summary>
         /// <param name="dbConnection"></param>
-        /// <returns></returns>
+        /// <returns>An opened SQL Database Connection.</returns>
+        /// <search>database, db, open, connection, sql</search>
         [NodeCategory("Create")]
         public static SqlConnection ConnectionOpen(string dbConnection)
         {
@@ -81,6 +82,7 @@ namespace TidalWave
         /// <param name="Connection"></param>
         /// <param name="statement"></param>
         /// <returns>Returns information as strings.</returns>
+        /// <search>sql, database, select</search>
         [NodeCategory("Action")]
         public static List<dynamic> Select(string Connection, string statement)
         {
@@ -199,7 +201,8 @@ namespace TidalWave
         /// <param name="Columns">Column Names.</param>
         /// <param name="Values">Values to Update.</param>
         /// <param name="Where">Filter using a WHERE. The WHERE is required with this node.</param>
-        /// <returns></returns>
+        /// <returns>Confirmation of updated table.</returns>
+        /// <search>sql, database, db, update</search>
         [NodeCategory("Action")]
         public static List<string> Update(string Table, List<string> Columns, List<List<dynamic>> Values, string Where)
         {
@@ -232,6 +235,8 @@ namespace TidalWave
         /// Closes a SQL Connection.
         /// </summary>
         /// <param name="Connection">The Connection as a SQLConnection object.</param>
+        /// <returns>Closes the SQL Connection.</returns>
+        /// <search>database, db, sql, connection, close</search>
         [NodeCategory("Create")]
         public static void ConnectionClose(SqlConnection Connection)
         {

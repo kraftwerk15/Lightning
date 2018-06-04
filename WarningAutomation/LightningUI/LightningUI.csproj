@@ -7,7 +7,7 @@
     <ProjectGuid>{863166A4-E192-4C39-9809-D08F4666C17D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightningUI.Utilities</RootNamespace>
+    <RootNamespace>WorksetConfigure</RootNamespace>
     <AssemblyName>Lightning2UI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,6 +55,10 @@
       <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoUtilities.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="ProtoCore">
       <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\ProtoCore.dll</HintPath>
       <Private>False</Private>
@@ -77,6 +81,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Example.cs" />
     <Compile Include="SlabEdgeTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIUtilities.cs" />
@@ -95,6 +101,36 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lightning2UI_DynamoCustomization.xml" />
+    <None Include="Resources\SlabEdges.SlabEdgeTypes.Small.png" />
+    <None Include="Resources\SlabEdges.SlabEdgeTypes.Large.png" />
+    <None Include="Resources\WorksetConfigure.WorksetConfigurationUI.Small.png" />
+    <None Include="Resources\WorksetConfigure.WorksetConfigurationUI.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LightningUIImages.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="BeforeBuild">
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)LightningUIImages.resx" OutputResources="$(ProjectDir)Lightning2UIImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL TargetType="library" EmbedResources="$(ProjectDir)Lightning2UIImages.resources" OutputAssembly="$(OutDir)Lightning2UI.customization.dll" />
+  </Target>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(OutDir)Lightning2UI.customization.dll" DestinationFolder="\\stls-fs05\ArchTools\Dynamo\2.0\Lightning\bin\" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutDir)Lightning2UI.dll" DestinationFolder="\\stls-fs05\ArchTools\Dynamo\2.0\Lightning\bin\" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutDir)Lightning2UI.xml" DestinationFolder="\\stls-fs05\ArchTools\Dynamo\2.0\Lightning\bin\" ContinueOnError="true" />
+  </Target>
+  <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.10.1\build\NUnit.props'))" />
+  </Target>
 </Project>

@@ -19,7 +19,8 @@ namespace Wind
         /// <param name="subject">The subject of the email.</param>
         /// <param name="body">The body of the email.</param>
         /// <returns>True if the email sent correctly. False if the email failed.</returns>
-        public static bool CreateEmail(string server, int port, string RecipientEmailAddress, string SenderEmailAddress, string subject, string body)
+        /// <search>email, notification, send, recipient, sender</search>
+        public static bool Send(string server, int port, string RecipientEmailAddress, string SenderEmailAddress, string subject, string body)
         {
             string to = RecipientEmailAddress;
             string from = SenderEmailAddress;

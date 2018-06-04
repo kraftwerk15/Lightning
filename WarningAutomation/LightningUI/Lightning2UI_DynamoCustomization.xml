@@ -4,11 +4,11 @@
     <name>Lightning2UI</name>
   </assembly>
   <namespaces>
-    <namespace name="SlabEdgeTypes">
-      <category>Lightning.Revit.SlabEdges</category>
+    <namespace name="WorksetConfigure">
+      <category>Lightning.Revit</category>
     </namespace>
-    <namespace name="WorksetConfiguration">
-      <category>Lightning.Revit.Synchronization</category>
+    <namespace name="SlabEdges">
+      <category>Lightning.Revit</category>
     </namespace>
   </namespaces>
 </doc>

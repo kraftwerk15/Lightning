@@ -325,11 +325,11 @@ namespace Thunder
 
         /// <summary>
         /// Create a journal file for purging and subsequently saving a Revit file.
-        /// 
         /// </summary>
         /// <param name="revitFilePath">The path to the Revit file. This can be an .rvt or .rfa file. The path may not contain whitespace or accented characters.</param>
         /// <param name="journalFilePath">The path of the generated journal file.</param>
         /// <returns>The path of the generated journal file.</returns>
+        /// <search>purge, model, central, local, clean</search>
         [NodeCategory("Action")]
         public static string PurgeModel(string revitFilePath, string journalFilePath)
         {
@@ -355,6 +355,7 @@ namespace Thunder
         /// <param name="revitFilePaths">The paths to the Revit files. These can be .rvt or .rfa files. The paths may not contain whitespace or accented characters.</param>
         /// <param name="journalFilePath">The path of the generated journal file.</param>
         /// <returns>The path of the generated journal file.</returns>
+        /// <search>purge, model, central, local, clean</search>
         [NodeCategory("Action")]
         public static string PurgeModels(List<string> revitFilePaths, string journalFilePath)
         {
@@ -639,6 +640,7 @@ namespace Thunder
         /// <param name="multithreading">Pass in the number of concurrent applications to run. Defaults to not run concurrently to save on resources.</param>
         /// <returns name="Status">What the status was when attempting to run the process. If not using SQL, status will return as the exit code from the application, i.e. 0 for successful transaction.</returns>
         /// <returns name="Failed">Attempting to log if there was a failure.</returns>
+        /// <search>run, journal, automation, model</search>
         [NodeCategory("Action")]
         [MultiReturn(new[] {"Status", "Failed"})]
         public static Dictionary<string, List<dynamic>> ExecuteJournal(List<List<string>> CentralFilePath, List<List<string>> JournalFilePath, int prjKey = 0, string SQLConnectionString = "", string SQLSelect = "", int multithreading = 0)
@@ -712,6 +714,7 @@ namespace Thunder
         /// <param name="circumventPerspectiveViews">Should the document switch to the default 3D view? Set this to true if you expect models will open with a perspective view as last saved view / starting view.</param>
         /// <param name="workshareScenario">Check if in a Revit Worksharing scenario.</param>
         /// <returns>The path of the generated journal file.</returns>
+        /// <search>create, journal, automation, single, path, assessment, test</search>
         [NodeCategory("Create")]
         public static string BySinglePath(string revitFilePath, string workspacePath, dynamic revitVersion, string journalFilePath = "", bool debugMode = false, bool circumventPerspectiveViews = false, bool workshareScenario = false)
         {
@@ -806,6 +809,7 @@ namespace Thunder
         /// <returns name="Journal File Path">A list of Journal Files created during this run.</returns>
         /// <returns name="Run Time">The time necessary to complete this node.</returns>
         /// <returns name="Failed Message">A list of Failure Messages hopefully to help you identify why that file did not complete.</returns>
+        /// <search>run, journal, test, detach, model, central</search>
         [NodeCategory("Create")]
         [MultiReturn(new[] {"Central File Path","Journal File Path","Run Time", "Failed Message"})]
         public static Dictionary<string, List<dynamic>> DetachModel(string workspacePath, List<List<string>> FolderLocations, string saveLocation, bool detach, bool openCentral, bool debugMode = true, bool circumventPerspectiveViews = true)

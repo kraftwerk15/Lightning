@@ -19,6 +19,7 @@ namespace Spring
         /// <param name="element">Expecting an ElementId.</param>
         /// <param name="phaseID">Expecting an ElementId.</param>
         /// <returns>The Phase Status as a string. Changing from enum.</returns>
+        /// <search>element, phase, past, future, current, existing, new, construction, status</search>
         [IsVisibleInDynamoLibrary(false)]
         internal static string GetPhaseStatus(ElementId element, ElementId phaseID)
         {
