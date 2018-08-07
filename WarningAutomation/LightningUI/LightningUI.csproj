@@ -55,8 +55,8 @@
       <HintPath>..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoUtilities.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="ProtoCore">
@@ -91,9 +91,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Example.cs" />
+    <None Include="packages.config" />
     <Compile Include="SlabEdgeTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIUtilities.cs" />
+    <None Include="UIUtilities.cs" />
     <Compile Include="WorksetConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -107,10 +108,9 @@
     <None Include="Resources\WorksetConfigure.WorksetConfigurationUI.Large.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="LightningUIImages.resx" />
+    <EmbeddedResource Include="LightningUIImages.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">

@@ -118,50 +118,74 @@ namespace Thunder
             try
             {
                 List<string> small = new List<string>();
-                List<string> parent = Directory.EnumerateDirectories(filePath, matchPattern).ToList();
-                foreach (string item in parent)
+                List<string> loopFiles = Directory.EnumerateFiles(filePath, "*.*", SearchOption.AllDirectories).Where(s => ext.Equals(Path.GetExtension(s))).ToList();
+                if(loopFiles.Count > 0)
                 {
-                    if (prjNum.StartsWith("Q"))
+                    foreach (var a in loopFiles)
                     {
-                        path = item + @"\";
-                    }
-                    else if(prjNum.StartsWith("18"))
-                    {
-                        path = item + @"\" + prjNum + @"_BIM\";
-                    }
-                    else
-                    //else the file is not on the Q: drive and folder structure changed in 2018
-                    {
-                        path = item + @"\" + prjNum + @"_BIM\" + prjNum + @"_Central";
-                    }
-                    //List<string> loopFiles = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s))).ToList();
-                    List<string> loopFiles = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories).Where(s => ext.Equals(Path.GetExtension(s))).ToList();
-                    if (loopFiles.Count > 0)
-                    {
-                        foreach (var a in loopFiles)
+                        string filename;
+                        int position = a.LastIndexOf('.');
+                        filename = a.Remove(position);
+                        string pattern = @"(\.[0-9]{4}$)";
+                        bool m = Regex.IsMatch(filename, pattern);
+                        string recovery = @"(\(Recovery\))";
+                        bool n = Regex.IsMatch(filename, recovery);
+                        if (!m && !n && !string.IsNullOrEmpty(a))
                         {
-                            string filename;
-                            int position = a.LastIndexOf('.');
-                            filename = a.Remove(position);
-                            string pattern = @"(\.[0-9]{4}$)";
-                            bool m = Regex.IsMatch(filename, pattern);
-                            string recovery = @"(\(Recovery\))";
-                            bool n = Regex.IsMatch(filename, recovery);
-                            if(!m && !n && !string.IsNullOrEmpty(a))
-                            {
-                                small.Add(a);
-                                System.Diagnostics.Debug.WriteLine("Basic File Info 146 : " + a.ToString());
-                            }
-                        };
-                    }
-                    else
-                    {
-                        small.Add(null);
+                            small.Add(a);
+                            System.Diagnostics.Debug.WriteLine("Basic File Info 136 : " + a.ToString());
+                        }
                     };
-                    cont.Add(small);
-
-                    break;
                 }
+                else
+                {
+                    small.Add(null);
+                };
+                cont.Add(small);
+                //List<string> parent = Directory.EnumerateDirectories(filePath, matchPattern).ToList();
+                //foreach (string item in parent)
+                //{
+                    //if (prjNum.StartsWith("Q"))
+                    //{
+                    //    path = item + @"\";
+                    //}
+                    //else if(prjNum.StartsWith("18"))
+                    //{
+                    //    path = item + @"\" + prjNum + @"_BIM\";
+                    //}
+                    //else
+                    ////else the file is not on the Q: drive and folder structure changed in 2018
+                    //{
+                    //    path = item + @"\" + prjNum + @"_BIM\" + prjNum + @"_Central";
+                    //}
+                    //List<string> loopFiles = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories).Where(s => ext.Contains(Path.GetExtension(s))).ToList();
+                    
+                //    if (loopFiles.Count > 0)
+                //    {
+                //        foreach (var a in loopFiles)
+                //        {
+                //            string filename;
+                //            int position = a.LastIndexOf('.');
+                //            filename = a.Remove(position);
+                //            string pattern = @"(\.[0-9]{4}$)";
+                //            bool m = Regex.IsMatch(filename, pattern);
+                //            string recovery = @"(\(Recovery\))";
+                //            bool n = Regex.IsMatch(filename, recovery);
+                //            if(!m && !n && !string.IsNullOrEmpty(a))
+                //            {
+                //                small.Add(a);
+                //                System.Diagnostics.Debug.WriteLine("Basic File Info 146 : " + a.ToString());
+                //            }
+                //        };
+                //    }
+                //    else
+                //    {
+                //        small.Add(null);
+                //    };
+                //    cont.Add(small);
+
+                //    //break;
+                //}
                 //return cont;
             }
             catch

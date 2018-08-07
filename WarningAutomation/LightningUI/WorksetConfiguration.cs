@@ -19,7 +19,7 @@ namespace WorksetConfigure
     /// <returns>A list of the Workset Configurations of a project.</returns>
     /// <search>workset, configure, confirguration, list, editable, all, last, viewed, user, specify</search>
     [NodeName("Workset Configuration")]
-    [NodeCategory("Lightning.Revit.Worksets")]
+    [NodeCategory("Lightning.Revit.Workset")]
     [IsDesignScriptCompatible]
     public class WorksetConfigurationUI : DSDropDownBase
     {
@@ -28,7 +28,7 @@ namespace WorksetConfigure
 
         [JsonConstructor]
         public WorksetConfigurationUI(IEnumerable<PortModel> inPorts, IEnumerable<PortModel> outPorts) : base("WorksetConfiguration", inPorts, outPorts) {}
-        
+        [JsonIgnore]
         public Type EnumerationType = null;
 
         protected override SelectionState PopulateItemsCore(string currentSelection)
@@ -71,6 +71,7 @@ namespace WorksetConfigure
             SelectedIndex = 0;
             return SelectionState.Done;
         }
+        
         public override IEnumerable<AssociativeNode> BuildOutputAst(List<AssociativeNode> inputAstNodes)
         {
             // Build an AST node for the type of object contained in your Items collection.

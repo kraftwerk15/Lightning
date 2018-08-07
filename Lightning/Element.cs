@@ -6,6 +6,7 @@ using RevitServices.Persistence;
 using RevitServices.Transactions;
 using Dynamo.Graph.Nodes;
 using Autodesk.DesignScript.Runtime;
+using Revit.Elements;
 
 namespace Spring
 {
@@ -129,6 +130,163 @@ namespace Spring
                 vs.Add(phaseStat);
             }
             return vs;
+        }
+
+        /// <summary>
+        /// Get a Revit Element given its ElementId.
+        /// </summary>
+        /// <param name="ElementID">ElementId of the Element we will query.</param>
+        /// <returns>The Revit Element.</returns>
+        /// <search>get, by, id, element</search>
+        [NodeCategory("Query")]
+        public static Revit.Elements.Element GetByID(int ElementID)
+        {
+            var doc = DocumentManager.Instance.CurrentDBDocument;
+            ElementId id = new ElementId(ElementID);
+            var elem = doc.GetElement(id);
+            return elem.ToDSType(true);
+        }
+
+
+        private static Dictionary<string, object> ElementCollector()
+        {
+            List<dynamic> ids = new List<dynamic>();
+            List<dynamic> name = new List<dynamic>();
+            List<dynamic> elements = new List<dynamic>();
+            List<dynamic> clean = new List<dynamic>();
+            var doc = DocumentManager.Instance.CurrentDBDocument;
+            Categories categories = doc.Settings.Categories;
+            foreach (Autodesk.Revit.DB.Category i in categories)
+            {
+                try
+                {
+                    ids.Add(i.Id.IntegerValue);
+                }
+                catch
+                {
+                    break;
+                }
+            }
+            foreach (var i in ids)
+            {
+                try
+                {
+                    name.Add(System.Enum.ToObject(typeof(BuiltInCategory), i));
+                }
+                catch
+                {
+                    break;
+                }
+            }
+            foreach (var k in name)
+            {
+                
+                List<Autodesk.Revit.DB.Element> elem = new FilteredElementCollector(doc).WhereElementIsNotElementType().OfCategory(k).ToElements();
+                foreach(var i in elem)
+                {
+                    Revit.Elements.Element tem = i.ToDSType(true);
+                    elements.Add(tem);
+                }
+                List<dynamic> temp = new List<dynamic>(elem);
+                clean.Add(temp);
+            }
+            return new Dictionary<string, object>
+            {
+                {"Category Id", ids },
+                {"Category Name", name },
+                {"Elements", elements },
+                {"Clean", clean }
+            };
+        }
+
+        /// <summary>
+        /// Collect all elements that fall under Built-In Categories in the Project.
+        /// </summary>
+        /// <returns name="Category Id">The ID of the Category.</returns>
+        /// <returns name="Category Name">The Name of the Category.</returns>
+        /// <returns name="Elements">A list of Elements.</returns>
+        /// <search>project, category, elements, collector, collect</search>
+        [NodeCategory("Query")]
+        [MultiReturn(new[] {"Category Id", "Category Name", "Elements" })]
+        public static Dictionary<string, object> CollectElements()
+        {
+            List<dynamic> ids = new List<dynamic>();
+            List<dynamic> name = new List<dynamic>();
+            List<dynamic> elements = new List<dynamic>();
+            Dictionary<string,object> elem = ElementCollector();
+            object temp;
+            if(elem.TryGetValue("Category Id", out temp))
+            {
+                ids = temp as List<dynamic>;
+            }
+            if(elem.TryGetValue("Category Name",out temp))
+            {
+                name = temp as List<dynamic>;
+            }
+            if(elem.TryGetValue("Elements",out temp))
+            {
+                elements = temp as List<dynamic>;
+            }
+            return new Dictionary<string, object>
+            {
+                {"Category Id", ids },
+                {"Category Name", name },
+                {"Elements", elements }
+            };
+        }
+
+        /// <summary>
+        /// Collect Modeled Elements in the Project.
+        /// </summary>
+        /// <returns name="Model Elements">List of Model Elements.</returns>
+        /// <returns name="Count">The count of model elements.</returns>
+        /// <search>model, elements, walls, doors, collect, collector</search>
+        [NodeCategory("Query")]
+        [MultiReturn(new[] { "Model Elements", "Count" })]
+        public static Dictionary<string, object> CollectModelElements()
+        {
+            List<dynamic> ids = new List<dynamic>();
+            List<dynamic> name = new List<dynamic>();
+            List<dynamic> elements = new List<dynamic>();
+            List<dynamic> error = new List<dynamic>();
+            Dictionary<string, object> elem = ElementCollector();
+            object temp;
+            if (elem.TryGetValue("Clean", out temp))
+            {
+                elements = temp as List<dynamic>;
+                foreach (var i in elements)
+                {
+                    if (i == null || i.Count == 0)
+                        continue;
+                    foreach(Autodesk.Revit.DB.Element j in i)
+                    {
+                        try
+                        {
+                            string k = j.ToString();
+                            if (j.ViewSpecific == false && (k != "Insulations" || k != "Analytical" || k != "Systems" || k != "Tags" || k != "Dimension" || k != "Views"))
+                            {
+                                name.Add(j.ToDSType(true));
+                            }
+                           
+                            if (k == "Insulations" || k == "Analytical" || k == "Systems" || k == "Tags" || k == "Dimension")
+                            {
+                                ids.Add(i);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            error.Add(ex.ToString());
+                        }
+                    }
+                }
+            }
+            int count = name.Count();
+            return new Dictionary<string, object>
+            {
+                {"Model Elements", name },
+                {"Count", count },
+                {"Error", error }
+            };
         }
     }
 }

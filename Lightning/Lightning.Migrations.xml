@@ -16,4 +16,16 @@
     <oldName>Spring.Elements.GetFamilyType</oldName>
     <newName>Spring.FamilyType.GetFamilyType</newName>
   </priorNameHint>
+  <priorNameHint>
+    <oldName>Spring.Synchronization.SynchronizeWithCentral_General</oldName>
+    <newName>Spring.Synchronization.SynchronizeWithCentralGeneral</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>Spring.Synchronization.SynchronizeWithCentral_Specific</oldName>
+    <newName>Spring.Synchronization.SynchronizeWithCentralSpecific</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>Spring.FamilyType.ByFamilyNameandTypeName</oldName>
+    <newName>Spring.FamilyType.GetFamilyType</newName>
+  </priorNameHint>
 </migrations>

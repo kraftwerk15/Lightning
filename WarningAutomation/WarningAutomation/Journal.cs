@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Autodesk.DesignScript.Runtime;
 using Dynamo.Graph.Nodes;
+using System.Linq;
 
 namespace Thunder
 {
@@ -408,14 +409,14 @@ namespace Thunder
             return yearList;
         }
 
-        private static string ContentProcess(int i, int prjKey, string Year, string Holding, string CentralPath, string newConn, string SQLSelect)
+        private static string ContentProcess(int i, int prjKey, string Year, List<string> Holding, string CentralPath, string newConn, string SQLSelect)
         {
             string processPath;
             string args;
             //int key = ring + i;
             int year = Convert.ToInt32(Year);
             //int year = Year;
-            string journal = Holding;
+            string journal = Holding[0];
             List<string> temp = YearSwitch(i, year, journal);
             processPath = temp[0];
             args = temp[1];
@@ -423,7 +424,7 @@ namespace Thunder
             List<int> sqlEarly = new List<int>();
             if(newConn != "" && newConn != null)
             {
-                sqlEarly = TidalWave.SQL.InsertInto(newConn, Holding, dateEx);
+                sqlEarly = TidalWave.SQL.InsertInto(newConn, Holding[1], dateEx);
             }
             //returns the runID and the projectTableID to send to the .csv
             double fileSize = IdentifyYear.FileSize(CentralPath);
@@ -493,7 +494,7 @@ namespace Thunder
             List<dynamic> Central = new List<dynamic>();
             List<dynamic> Holding = new List<dynamic>();
             List<dynamic> Failed = new List<dynamic>();
-            List<dynamic> YearList = new List<dynamic>();
+            //List<dynamic> YearList = new List<dynamic>();
             List<dynamic> container = new List<dynamic>();
             if (fileName.Count > 0 && fileName[0] != null)
             {
@@ -507,8 +508,8 @@ namespace Thunder
                         bool workshare = false;
                         //give a clean list to insert content
                         List<dynamic> tempPrj = new List<dynamic>();
-
-                        YearList.Clear();
+                        List<dynamic> YearList = new List<dynamic>();
+                        //YearList.Clear();
 
                         try
                         {
@@ -549,6 +550,10 @@ namespace Thunder
                             {
                                 Failed.Add("Duplicate Found. Omitting from Sequence. " + path);
                             }
+                            else if (RevitYear < 2017)
+                            {
+                                Failed.Add("Revit 2016 file that will not run Dynamo 2.0");
+                            }
                             //all is true, lets move forward
                             else
                             {
@@ -557,7 +562,7 @@ namespace Thunder
                                 //run a method
                                 int modelYear = RevitVersionAsInt(RevitYear);
                                 //add the model year to a List
-                                YearList.Add(quasi);
+                                YearList.Add(modelYear);
                                 //match that with the Dynamo Year
                                 string dynVersion = GetDynamoVersion(RevitYear);
                                 // Create journal string
@@ -587,8 +592,11 @@ namespace Thunder
                                 tempPrj.Add(projectNumber);
                                 Debug.WriteLine(projectNumber);
                                 //Add the journal file to a list for us to work over later out of this loop
-                                Holding.Add(tempPrj);
-                                Central.Add(YearList);
+                                if(tempPrj != null && YearList != null)
+                                {
+                                    Holding.Add(tempPrj);
+                                    Central.Add(YearList);
+                                }
                             }
 
                         }
@@ -643,7 +651,7 @@ namespace Thunder
         /// <search>run, journal, automation, model</search>
         [NodeCategory("Action")]
         [MultiReturn(new[] {"Status", "Failed"})]
-        public static Dictionary<string, List<dynamic>> ExecuteJournal(List<List<string>> CentralFilePath, List<List<string>> JournalFilePath, int prjKey = 0, string SQLConnectionString = "", string SQLSelect = "", int multithreading = 0)
+        public static Dictionary<string, List<dynamic>> ExecuteJournal(List<List<dynamic>> CentralFilePath, List<List<string>> JournalFilePath, int prjKey = 0, string SQLConnectionString = "", string SQLSelect = "", int multithreading = 0)
         {
             List<dynamic> Status = new List<dynamic>();
             List<dynamic> Failed = new List<dynamic>();
@@ -662,7 +670,7 @@ namespace Thunder
                         Parallel.ForEach(CentralFilePath, options, (x, y, i) =>
                         {
                             int key = unchecked((int)i);
-                            status = ContentProcess(key, prjKey, CentralFilePath[key][1], JournalFilePath[key][0], CentralFilePath[key][0], SQLConnectionString, SQLSelect);
+                            status = ContentProcess(key, prjKey, CentralFilePath[key][1], JournalFilePath[key], CentralFilePath[key][0], SQLConnectionString, SQLSelect);
                             Status.Add(status);
                         });
                         
@@ -678,7 +686,7 @@ namespace Thunder
                 {
                     for (int i = 0; i < CentralFilePath.Count; i++)
                     {
-                        string status = ContentProcess(prjKey, prjKey, CentralFilePath[i][1], JournalFilePath[i][0], CentralFilePath[i][0], SQLConnectionString, SQLSelect);
+                        string status = ContentProcess(prjKey, prjKey, CentralFilePath[i][1], JournalFilePath[i], CentralFilePath[i][0], SQLConnectionString, SQLSelect);
                         Status.Add(status);
                     };
                 }

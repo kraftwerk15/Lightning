@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Dynamo.Graph.Nodes;
 using Autodesk.Revit.DB;
 using CoreNodeModels;
-//using DSRevitNodesUI;
+using DSRevitNodesUI;
 using ProtoCore.AST.AssociativeAST;
 using RevitServices.Persistence;
 using RevitServices.Transactions;
 using Dynamo.Utilities;
-using LightningUI.Utilities;
+//using LightningUI.Utilities;
 using Autodesk.DesignScript.Runtime;
 using Newtonsoft.Json;
 
@@ -28,7 +28,7 @@ namespace SlabEdges
     [IsDesignScriptCompatible]
     public class SlabEdgeTypes : CustomRevitElementDropDown
     {
-        public SlabEdgeTypes() : base("Slab Edge Type") { }
+        public SlabEdgeTypes() : base("Slab Edge Type", typeof(SlabEdgeType)) { }
 
         [JsonConstructor]
         public SlabEdgeTypes(IEnumerable<PortModel> inPorts, IEnumerable<PortModel> outPorts) : base("Slab Edge Type", typeof(SlabEdgeType), inPorts, outPorts) { }
